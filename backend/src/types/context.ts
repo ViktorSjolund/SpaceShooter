@@ -1,4 +1,4 @@
-import mysql from 'mysql'
+import * as mysql from 'mysql2/promise'
 import { Request, Response } from 'express'
 
 export type ApolloContextType = {

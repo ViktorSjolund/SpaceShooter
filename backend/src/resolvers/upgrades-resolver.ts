@@ -19,9 +19,7 @@ export class UpgradesResolver {
     @Arg('character_id', () => Int) characterId: number,
     @Ctx() { connection, req }: ApolloContextType
   ): Promise<Upgrades[]> {
-    const query = util.promisify(connection.query).bind(connection)
-
-    const upgrades: any = await query(`
+    const upgrades: any = await connection.query(`
       SELECT * 
       FROM upgrades 
       WHERE user_id = ${req.session.userId} 
@@ -44,9 +42,7 @@ export class UpgradesResolver {
     @Arg('character_id', () => Int) characterId: number,
     @Ctx() { connection, req }: ApolloContextType
   ): Promise<Boolean> {
-    const query = util.promisify(connection.query).bind(connection)
-
-    const result: any = await query(`
+    const result: any = await connection.query(`
       SELECT * 
       FROM upgrades 
       WHERE (user_id = ${req.session.userId} 
@@ -58,7 +54,7 @@ export class UpgradesResolver {
       return false
     }
 
-    await query(`
+    await connection.query(`
       INSERT INTO upgrades (id, user_id, upgrade_id, character_id) 
       VALUES (${null}, ${req.session.userId}, ${upgradeId}, ${characterId})
     `)

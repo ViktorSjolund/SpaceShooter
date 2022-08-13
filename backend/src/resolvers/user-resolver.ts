@@ -21,8 +21,7 @@ export class UserResolver {
     @Arg('currency', () => Int) currency: number,
     @Ctx() { connection, req }: ApolloContextType
   ): Promise<Boolean> {
-    const query = util.promisify(connection.query).bind(connection)
-    await query(
+    await connection.query(
       `UPDATE user SET currency = currency + ${currency} WHERE id = ${req.session.userId}`
     )
 
@@ -40,8 +39,7 @@ export class UserResolver {
     @Arg('experience', () => Int) experience: number,
     @Ctx() { connection, req }: ApolloContextType
   ): Promise<Boolean> {
-    const query = util.promisify(connection.query).bind(connection)
-    await query(
+    await connection.query(
       `UPDATE user SET experience = experience + ${experience} WHERE id = ${req.session.userId}`
     )
 
@@ -68,8 +66,7 @@ export class UserResolver {
       }
     }
 
-    const query = util.promisify(connection.query).bind(connection)
-    const user: any = await query(
+    const user: any = await connection.query(
       `SELECT * FROM user WHERE (id = ${req.session.userId})`
     )
 
@@ -107,9 +104,7 @@ export class UserResolver {
     @Arg('password', () => String) password: string,
     @Ctx() { connection, req }: ApolloContextType
   ): Promise<UserResponse> {
-    const query = util.promisify(connection.query).bind(connection)
-
-    const user: any = await query(
+    const user: any = await connection.query(
       `SELECT * FROM user WHERE (username = '${username}')`
     )
 
@@ -157,8 +152,6 @@ export class UserResolver {
     @Arg('password', () => String) password: string,
     @Ctx() { connection }: ApolloContextType
   ): Promise<RegisterResponse> {
-    const query = util.promisify(connection.query).bind(connection)
-
     const minUsernameLength = 3
     if (username.length <= minUsernameLength) {
       return {
@@ -187,7 +180,7 @@ export class UserResolver {
     const hashedPw = await bcrypt.hash(password, saltRounds)
 
     try {
-      await query(
+      await connection.query(
         `INSERT INTO user (id, username, password) VALUES (${null}, '${username}', '${hashedPw}')`
       )
     } catch (err: any) {

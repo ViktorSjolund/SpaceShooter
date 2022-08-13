@@ -19,19 +19,28 @@ export class LeaderboardResolver {
     @Arg('time', () => String) time: string,
     @Ctx() { connection, req }: ApolloContextType
   ) {
-    const query = util.promisify(connection.query).bind(connection)
-
-    const result: any = await query(`SELECT time FROM leaderboard WHERE user_id = ${req.session.userId}`)
+    const result: any = await connection.query(`
+      SELECT time 
+      FROM leaderboard 
+      WHERE user_id = ${req.session.userId}
+    `)
 
     if (!result[0]) {
-      await query(`INSERT INTO leaderboard (id, user_id, time) VALUES(${null}, ${req.session.userId}, '${time}')`)
+      await connection.query(`
+        INSERT INTO leaderboard (id, user_id, time) 
+        VALUES(${null}, ${req.session.userId}, '${time}')
+      `)
     }
 
     if (result[0].time) {
       const bestTime = parseInt(result[0].time)
 
       if (parseInt(time) > bestTime) {
-        await query(`UPDATE leaderboard SET time = '${time}' WHERE user_id = ${req.session.userId}`)
+        await connection.query(`
+          UPDATE leaderboard 
+          SET time = '${time}' 
+          WHERE user_id = ${req.session.userId}
+        `)
       }
     } 
 
@@ -47,9 +56,7 @@ export class LeaderboardResolver {
   async leaderboard(
     @Ctx() { connection }: ApolloContextType
   ): Promise<LeaderboardResponse[]> {
-    const query = util.promisify(connection.query).bind(connection)
-
-    const result: any = await query(`
+    const result: any = await connection.query(`
       SELECT username, time, experience 
       FROM leaderboard, user 
       WHERE leaderboard.user_id = user.id 
