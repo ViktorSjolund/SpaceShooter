@@ -1,0 +1,3 @@
+mutation AddUpgrade($characterId: Int!, $upgradeId: Int!) {
+  addUpgrade(character_id: $characterId, upgrade_id: $upgradeId)
+}

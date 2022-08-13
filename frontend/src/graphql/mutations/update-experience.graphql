@@ -1,0 +1,3 @@
+mutation UpdateExperience($experience: Int!) {
+  updateExperience(experience: $experience)
+}

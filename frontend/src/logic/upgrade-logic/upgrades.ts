@@ -1,0 +1,77 @@
+import { TUpgrade } from '@/types/types'
+import { CHARACTER, UPGRADE_ID } from '../util/enums'
+
+export const upgrades: TUpgrade[] = Array.from([
+  {
+    id: UPGRADE_ID.ADD_PROECTILE,
+    cost: 3000,
+    requirement: 1,
+    description: 'Adds +1 projectile(s).',
+    imgSrc: '/img/sword.png',
+    characters: [CHARACTER.GUNNER],
+  },
+  {
+    id: UPGRADE_ID.DUPLICATE_PROECTILES,
+    cost: 30000,
+    requirement: 59,
+    description: 'Duplicates all projectiles.',
+    imgSrc: '/img/sword.png',
+    characters: [CHARACTER.GUNNER],
+  },
+  {
+    id: UPGRADE_ID.ADD_DAMAGE_TEN,
+    cost: 1500,
+    requirement: 5,
+    description: 'Adds +10% increased damage to attacks.',
+    imgSrc: '/img/sword.png',
+    characters: [CHARACTER.GUNNER, CHARACTER.BEAMER],
+  },
+  {
+    id: UPGRADE_ID.ADD_DAMAGE_TWENTY,
+    cost: 15000,
+    requirement: 24,
+    description: 'Adds +20% increased damage to attacks.',
+    imgSrc: '/img/sword.png',
+    characters: [CHARACTER.GUNNER, CHARACTER.BEAMER],
+  },
+  {
+    id: UPGRADE_ID.ADD_DAMAGE_THIRTY,
+    cost: 40000,
+    requirement: 55,
+    description: 'Adds +30% increased damage to attacks.',
+    imgSrc: '/img/sword.png',
+    characters: [CHARACTER.GUNNER, CHARACTER.BEAMER],
+  },
+  {
+    id: UPGRADE_ID.ADD_PIERCE,
+    cost: 8000,
+    requirement: 20,
+    description: 'Adds +1 pierce for all projectiles.',
+    imgSrc: '/img/sword.png',
+    characters: [CHARACTER.GUNNER],
+  },
+  {
+    id: UPGRADE_ID.ADD_ATTACK_RATE_TEN,
+    cost: 1000,
+    requirement: 8,
+    description: 'Adds +10% increased fire rate to attacks.',
+    imgSrc: '/img/sword.png',
+    characters: [CHARACTER.GUNNER, CHARACTER.BEAMER],
+  },
+  {
+    id: UPGRADE_ID.ADD_ATTACK_RATE_TWENTY,
+    cost: 8000,
+    requirement: 25,
+    description: 'Adds +20% increased fire rate to attacks.',
+    imgSrc: '/img/sword.png',
+    characters: [CHARACTER.GUNNER, CHARACTER.BEAMER],
+  },
+  {
+    id: UPGRADE_ID.ADD_ATTACK_RATE_THIRTY,
+    cost: 30000,
+    requirement: 47,
+    description: 'Adds +30% increased fire rate to attacks.',
+    imgSrc: '/img/sword.png',
+    characters: [CHARACTER.GUNNER, CHARACTER.BEAMER],
+  },
+])

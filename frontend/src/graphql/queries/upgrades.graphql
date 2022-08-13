@@ -1,0 +1,5 @@
+query Upgrades($characterId: Int!) {
+  upgrades(character_id: $characterId) {
+    upgrade_id
+  }
+}

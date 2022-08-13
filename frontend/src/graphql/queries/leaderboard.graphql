@@ -1,0 +1,7 @@
+query Leaderboard {
+  leaderboard {
+    username
+    time
+    experience
+  }
+}

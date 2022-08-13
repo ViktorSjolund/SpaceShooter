@@ -1,0 +1,37 @@
+export enum GAME_STATE {
+  PLAYING,
+  OVER,
+  WON,
+  PAUSED,
+}
+
+export enum LEVEL {
+  ONE,
+  TWO,
+  ENDLESS,
+}
+
+export enum UPGRADE_ID {
+  ADD_PROECTILE = 1,
+  ADD_PIERCE = 2,
+  ADD_DAMAGE_TEN = 3,
+  ADD_ATTACK_RATE_TEN = 4,
+  ADD_DAMAGE_TWENTY = 5,
+  ADD_ATTACK_RATE_TWENTY = 6,
+  ADD_DAMAGE_THIRTY = 7,
+  ADD_ATTACK_RATE_THIRTY = 8,
+  DUPLICATE_PROECTILES = 9
+}
+
+export enum CHARACTER {
+  GUNNER = 1,
+  BEAMER = 2,
+  THREE = 3,
+}
+
+export enum ENEMY {
+  SPLITTER,
+  ASTEROID,
+  UFO,
+  GIGANTOR,
+}

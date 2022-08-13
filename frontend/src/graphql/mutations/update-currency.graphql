@@ -1,0 +1,3 @@
+mutation UpdateCurrency($currency: Int!) {
+  updateCurrency(currency: $currency)
+}
