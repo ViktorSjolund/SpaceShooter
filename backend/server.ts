@@ -23,8 +23,8 @@ const main = async () => {
   const app = express()
   const connection = await mysql.createConnection({
     host: process.env.DATABASE_URL || 'localhost',
-    user: 'root',
-    password: 'root',
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
     database: 'space_shooter'
   })
 
