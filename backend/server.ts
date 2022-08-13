@@ -88,6 +88,10 @@ const main = async () => {
   await server.start()
   server.applyMiddleware({ app, cors: corsOptions })
 
+  app.get('/', (req, res) => {
+    res.sendStatus(200)
+  })
+
   app.listen(PORT, () => console.log(`Listening on port: ${PORT}`))
 }
 
