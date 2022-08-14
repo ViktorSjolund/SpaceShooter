@@ -16,7 +16,6 @@ import http from 'http'
 
 dotenv.config()
 const app = express()
-const httpServer = http.createServer(app)
 
 /**
  * Main function for starting the server.
@@ -66,12 +65,10 @@ const main = async () => {
       req,
       res,
     }),
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
   })
 
   const corsOptions: cors.CorsOptions = {
-    origin: [FRONTEND_URL],
-    credentials: true
+    origin: [FRONTEND_URL]
   }
 
   await server.start()
@@ -82,8 +79,8 @@ const main = async () => {
   })
 
   app.listen(PORT, () => console.log(`Listening on port: ${PORT}`))
+
+  return server
 }
 
-main()
-
-export default httpServer
+export default main()
