@@ -1,14 +1,14 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import { ApolloServer } from 'apollo-server-express'
-import { UserResolver } from './src/resolvers/user-resolver'
+import { UserResolver } from '../src/resolvers/user-resolver'
 import { buildSchema } from 'type-graphql'
 import 'reflect-metadata'
 import cors from 'cors'
 //import mysql from 'mysql'
 import session from 'express-session'
-import { UpgradesResolver } from './src/resolvers/upgrades-resolver'
-import { LeaderboardResolver } from './src/resolvers/leaderboard-resolver'
+import { UpgradesResolver } from '../src/resolvers/upgrades-resolver'
+import { LeaderboardResolver } from '../src/resolvers/leaderboard-resolver'
 const MySQLStore = require('express-mysql-session')(session)
 import * as mysql from 'mysql2/promise'
 
