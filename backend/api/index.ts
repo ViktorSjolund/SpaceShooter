@@ -1,6 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import { ApolloServer } from 'apollo-server-express'
+import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core'
 import { UserResolver } from '../src/resolvers/user-resolver'
 import { buildSchema } from 'type-graphql'
 import 'reflect-metadata'
@@ -10,9 +11,11 @@ import { UpgradesResolver } from '../src/resolvers/upgrades-resolver'
 import { LeaderboardResolver } from '../src/resolvers/leaderboard-resolver'
 const MySQLStore = require('express-mysql-session')(session)
 import * as mysql from 'mysql2/promise'
+import http from 'http'
 
 dotenv.config()
 const app = express()
+const httpServer = http.createServer(app)
 
 /**
  * Main function for starting the server.
@@ -23,7 +26,6 @@ const main = async () => {
   const connection = await mysql.createConnection(process.env.DATABASE_URL!)
 
   if (process.env.NODE_ENV === 'production') {
-    console.log(FRONTEND_URL)
     app.set('trust proxy', 1)
     app.use(cors({
       origin: [FRONTEND_URL],
@@ -63,6 +65,7 @@ const main = async () => {
       req,
       res,
     }),
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
   })
 
   const corsOptions: cors.CorsOptions = {
@@ -77,8 +80,8 @@ const main = async () => {
   })
 
   app.listen(PORT, () => console.log(`Listening on port: ${PORT}`))
-
-  return server
 }
 
-export default main()
+main()
+
+export default httpServer
