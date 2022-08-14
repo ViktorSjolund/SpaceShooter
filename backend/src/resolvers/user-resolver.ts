@@ -104,15 +104,11 @@ export class UserResolver {
     @Arg('password', () => String) password: string,
     @Ctx() { connection, req }: ApolloContextType
   ): Promise<UserResponse> {
-    const user: any = await connection.query(
+    const result: any = await connection.query(
       `SELECT * FROM user WHERE (username = '${username}')`
     )
 
-    console.log(user[0])
-    console.log(username)
-    console.log(password)
-
-    if (user.length === 0) {
+    if (result[0].length === 0) {
       return {
         errors: [
           {
@@ -122,10 +118,9 @@ export class UserResolver {
         ],
       }
     }
+    const user = result[0][0]
 
-    console.log(user[0].password)
-    const isValidPw = await bcrypt.compare(password, user[0].password)
-    console.log(isValidPw)
+    const isValidPw = await bcrypt.compare(password, user.password)
 
     if (!isValidPw) {
       return {
@@ -138,10 +133,10 @@ export class UserResolver {
       }
     }
 
-    req.session.userId = user[0].id
+    req.session.userId = user.id
 
     return {
-      user: user[0],
+      user: user,
     }
   }
 
