@@ -1,7 +1,6 @@
 import { Arg, Ctx, Int, Mutation, Query, Resolver } from 'type-graphql'
 import { Upgrades } from '../entities/upgrades'
 import { ApolloContextType } from '../types/context'
-import util from 'util'
 
 /**
  * A resolver for handling upgrade events.
@@ -26,7 +25,7 @@ export class UpgradesResolver {
       AND character_id = ${characterId}
     `)
 
-    return upgrades
+    return upgrades[0]
   }
 
   /**
@@ -50,7 +49,7 @@ export class UpgradesResolver {
       AND character_id = ${characterId})
     `)
     
-    if (result[0]) {
+    if (result[0][0]) {
       return false
     }
 

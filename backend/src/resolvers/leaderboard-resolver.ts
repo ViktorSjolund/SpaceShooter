@@ -1,6 +1,5 @@
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { ApolloContextType } from '../types/context'
-import util from 'util'
 import { LeaderboardResponse } from './responses/leaderboard-response'
 
 /**
@@ -25,14 +24,14 @@ export class LeaderboardResolver {
       WHERE user_id = ${req.session.userId}
     `)
 
-    if (!result[0]) {
+    if (!result[0][0]) {
       await connection.query(`
         INSERT INTO leaderboard (id, user_id, time) 
         VALUES(${null}, ${req.session.userId}, '${time}')
       `)
     }
 
-    if (result[0].time) {
+    if (result[0][0].time) {
       const bestTime = parseInt(result[0].time)
 
       if (parseInt(time) > bestTime) {
@@ -64,6 +63,6 @@ export class LeaderboardResolver {
       LIMIT 50
     `)
 
-    return result
+    return result[0]
   }
 }
