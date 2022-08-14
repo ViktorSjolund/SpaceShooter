@@ -108,7 +108,7 @@ export class UserResolver {
       `SELECT * FROM user WHERE (username = '${username}')`
     )
 
-    console.log(user)
+    console.log(user[0])
     console.log(username)
     console.log(password)
 
@@ -123,6 +123,7 @@ export class UserResolver {
       }
     }
 
+    console.log(user[0].password)
     const isValidPw = await bcrypt.compare(password, user[0].password)
     console.log(isValidPw)
 
