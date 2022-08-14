@@ -24,6 +24,7 @@ const httpServer = http.createServer(app)
 const main = async () => {  
   const PORT = process.env.PORT || 3001
   const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000'
+  console.log(process.env.DATABASE_URL)
   const connection = await mysql.createConnection({
     host: process.env.DATABASE_URL || 'localhost',
     user: process.env.MYSQL_USER,
