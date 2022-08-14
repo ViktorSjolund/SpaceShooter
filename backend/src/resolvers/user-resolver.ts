@@ -1,5 +1,4 @@
 import { Arg, Ctx, Int, Mutation, Query, Resolver } from 'type-graphql'
-import util from 'util'
 import bcrypt from 'bcrypt'
 import { ApolloContextType } from '../types/context'
 import { UserResponse } from './responses/user-response'
@@ -66,12 +65,12 @@ export class UserResolver {
       }
     }
 
-    const user: any = await connection.query(
+    const result: any = await connection.query(
       `SELECT * FROM user WHERE (id = ${req.session.userId})`
     )
 
     return {
-      user: user[0],
+      user: result[0][0],
     }
   }
 
