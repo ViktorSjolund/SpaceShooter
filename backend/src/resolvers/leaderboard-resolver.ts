@@ -32,7 +32,7 @@ export class LeaderboardResolver {
     }
 
     if (result[0][0].time) {
-      const bestTime = parseInt(result[0].time)
+      const bestTime = parseInt(result[0][0].time)
 
       if (parseInt(time) > bestTime) {
         await connection.query(`
