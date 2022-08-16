@@ -5,7 +5,7 @@ import { AudioHandler } from '../misc/audio-handler'
 export const GameOver = (props: TGameOverProps) => {
   const audioHandler = new AudioHandler()
 
-  const handleTryAgainClick = (e: any) => {
+  const handleTryAgainClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     props.tryAgain(e)
     audioHandler.playClickSound()
   }

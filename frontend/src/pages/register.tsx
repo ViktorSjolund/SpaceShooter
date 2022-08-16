@@ -12,19 +12,19 @@ export const Register = () => {
   let [repassword, setRepassword] = useState('')
   const navigate = useNavigate()
 
-  const handlePasswordChange = (e: any) => {
-    setPassword(e.target.value)
+  const handlePasswordChange = (e: React.FormEvent<HTMLInputElement>) => {
+    setPassword(e.currentTarget.value)
   }
 
-  const handleRepasswordChange = (e: any) => {
-    setRepassword(e.target.value)
+  const handleRepasswordChange = (e: React.FormEvent<HTMLInputElement>) => {
+    setRepassword(e.currentTarget.value)
   }
 
-  const handleUsernameChange = (e: any) => {
-    setUsername(e.target.value)
+  const handleUsernameChange = (e: React.FormEvent<HTMLInputElement>) => {
+    setUsername(e.currentTarget.value)
   }
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setPasswordErr('')
     setUsernameErr('')

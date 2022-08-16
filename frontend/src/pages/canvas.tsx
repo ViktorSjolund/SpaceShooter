@@ -54,7 +54,7 @@ export const Canvas = (props: TGameCanvasProps) => {
 
   const handleNextLevelClick = () => {
     const levelsOrder = props.lvlpicker.getLevelsOrderArray()
-    levelsOrder.forEach((levelCode: any, index: any) => {
+    levelsOrder.forEach((levelCode, index) => {
       const nextIndex = index + 1
       if (levelCode === props.lvlpicker.currentLevel) {
         if (nextIndex < levelsOrder.length) {

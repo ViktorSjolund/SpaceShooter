@@ -13,12 +13,12 @@ export const Login = (props: TLoginProps) => {
   let [passwordErr, setPasswordErr] = useState('')
   const navigate = useNavigate()
 
-  const handlePasswordChange = (e: any) => {
-    setPassword(e.target.value)
+  const handlePasswordChange = (e: React.FormEvent<HTMLInputElement>) => {
+    setPassword(e.currentTarget.value)
   }
 
-  const handleUsernameChange = (e: any) => {
-    setUsername(e.target.value)
+  const handleUsernameChange = (e: React.FormEvent<HTMLInputElement>) => {
+    setUsername(e.currentTarget.value)
   }
 
   const handleSubmit = async (e: any) => {

@@ -12,9 +12,13 @@ import {
   LeaderboardDocument,
   MeDocument,
   UpdateCurrencyDocument,
+  UpdateCurrencyMutationResult,
   UpdateExperienceDocument,
+  UpdateExperienceMutationResult,
   UpdateLeaderboardDocument,
+  UpdateLeaderboardMutationResult,
   UpgradesDocument,
+  UpgradesQueryResult,
 } from '../generated/graphql'
 import { CharacterPicker } from './character-picker'
 import { Gunner } from './entities/characters/gunner'
@@ -251,19 +255,19 @@ export class Game {
    * Applies upgrades for the gunner character.
    */
   async #applyGunnerUpgrades() {
-    const result = await this.#apolloClient.query<any>({
+    const result = await this.#apolloClient.query({
       query: UpgradesDocument,
       variables: {
         characterId: CHARACTER.GUNNER,
       },
-    })
+    }) as UpgradesQueryResult
 
-    if (!result.data.upgrades) {
+    if (!result.data?.upgrades) {
       return
     }
 
-    result.data.upgrades.forEach((dbUpgrade: any) => {
-      this.#upgrades.upgrades.forEach((defaultUpgrade) => {
+    result.data.upgrades.forEach(dbUpgrade => {
+      this.#upgrades.upgrades.forEach(defaultUpgrade => {
         if (dbUpgrade.upgrade_id === defaultUpgrade.id) {
           if (defaultUpgrade.id === UPGRADE_ID.ADD_PROECTILE) {
             this.#player.properties.numberOfProjectiles += 1
@@ -293,19 +297,19 @@ export class Game {
    * Applies upgrades for the beamer character
    */
   async #applyBeamerUpgrades() {
-    const result = await this.#apolloClient.query<any>({
+    const result = await this.#apolloClient.query({
       query: UpgradesDocument,
       variables: {
         characterId: CHARACTER.BEAMER,
       },
-    })
+    }) as UpgradesQueryResult
 
-    if (!result.data.upgrades) {
+    if (!result.data?.upgrades) {
       return
     }
 
-    result.data.upgrades.forEach((dbUpgrade: any) => {
-      this.#upgrades.upgrades.forEach((defaultUpgrade) => {
+    result.data.upgrades.forEach(dbUpgrade => {
+      this.#upgrades.upgrades.forEach(defaultUpgrade => {
         if (dbUpgrade.upgrade_id === defaultUpgrade.id) {
           if (defaultUpgrade.id === UPGRADE_ID.ADD_DAMAGE_TEN) {
             this.#player.properties.damage *= 1.1
@@ -507,7 +511,7 @@ export class Game {
         currency: this.#currencyEarned,
       },
       refetchQueries: [{ query: MeDocument }],
-    })
+    }) as UpdateCurrencyMutationResult
   }
 
   /**
@@ -520,7 +524,7 @@ export class Game {
         experience: this.#xpEarned,
       },
       refetchQueries: [{ query: MeDocument }],
-    })
+    }) as UpdateExperienceMutationResult
   }
 
   /**
@@ -545,7 +549,7 @@ export class Game {
         time: this.#timer.endTime,
       },
       refetchQueries: [{ query: LeaderboardDocument }],
-    })
+    }) as UpdateLeaderboardMutationResult
   }
 
   /**

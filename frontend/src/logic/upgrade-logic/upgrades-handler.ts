@@ -7,10 +7,13 @@ import type {
 } from '@/types/types'
 import {
   AddUpgradeDocument,
+  AddUpgradeMutationResult,
   MeDocument,
+  MeQueryResult,
   UpdateCurrencyDocument,
   UpdateCurrencyMutationResult,
   UpgradesDocument,
+  UpgradesQueryResult,
 } from '../../generated/graphql'
 import { CHARACTER, UPGRADE_ID } from '../util/enums'
 import { upgrades } from './upgrades'
@@ -43,11 +46,11 @@ export class UpgradesHandler {
     upgrade: TUpgrade,
     lvlHandler: PlayerLevelHandler
   ): Promise<TCouldPurchaseResponse> {
-    const meResponse = await this.#apolloClient.query<any>({
+    const result = await this.#apolloClient.query({
       query: MeDocument,
-    })
+    }) as MeQueryResult
 
-    if (meResponse.error) {
+    if (result.error || !result.data?.me.user) {
       return {
         error: {
           message: 'Something went wrong...',
@@ -55,10 +58,10 @@ export class UpgradesHandler {
       }
     }
 
-    const user = meResponse.data.me.user
+    const user = result.data.me.user
     const currency = user.currency || 0
 
-    const playerLvl = lvlHandler.getPlayerLevel(user.experience)
+    const playerLvl = lvlHandler.getPlayerLevel(user.experience!)
 
     if (upgrade.cost > currency) {
       return {
@@ -92,7 +95,7 @@ export class UpgradesHandler {
     cost: number,
     characterId: CHARACTER
   ): Promise<Boolean> {
-    const result = await this.#apolloClient.mutate<any>({
+    const result = await this.#apolloClient.mutate({
       mutation: AddUpgradeDocument,
       variables: {
         characterId,
@@ -109,14 +112,15 @@ export class UpgradesHandler {
           query: MeDocument,
         },
       ],
-    })
+    }) as AddUpgradeMutationResult
 
-    if (result.errors) {
+
+    if (result.error) {
       return false
     }
 
-    if (result.data.addUpgrade) {
-      await this.#apolloClient.mutate<UpdateCurrencyMutationResult>({
+    if (result.data?.addUpgrade) {
+      await this.#apolloClient.mutate({
         mutation: UpdateCurrencyDocument,
         variables: {
           currency: -cost,
@@ -132,7 +136,7 @@ export class UpgradesHandler {
             query: MeDocument,
           },
         ],
-      })
+      }) as UpdateCurrencyMutationResult
     }
 
     return true
@@ -151,14 +155,14 @@ export class UpgradesHandler {
     characterId: CHARACTER,
     lvlHandler: PlayerLevelHandler
   ): Promise<TAddUpgradeResponse> {
-    const result: any = await this.#apolloClient.query({
+    const result = await this.#apolloClient.query({
       query: UpgradesDocument,
       variables: {
         characterId,
       },
-    })
+    }) as UpgradesQueryResult
 
-    if (result.error) {
+    if (result.error || !result.data?.upgrades) {
       return {
         error: {
           message: 'Something went wrong...',
@@ -166,7 +170,7 @@ export class UpgradesHandler {
       }
     }
 
-    const resultUpgrade = result.data?.upgrades
+    const resultUpgrade = result.data.upgrades
 
     for (let i = 0; i < resultUpgrade.length; i++) {
       if (resultUpgrade[i].upgrade_id === upgradeId) {
@@ -178,7 +182,7 @@ export class UpgradesHandler {
       }
     }
 
-    for (const [index, upgrade] of this.#upgrades.entries()) {
+    for (const [, upgrade] of this.#upgrades.entries()) {
       if (upgrade.id === upgradeId) {
         const response = await this.#canPurchaseUpgrade(upgrade, lvlHandler)
         if (response.success) {

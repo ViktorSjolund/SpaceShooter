@@ -5,7 +5,7 @@ import { AudioHandler } from '../misc/audio-handler'
 export const GameWon = (props: TGameWonProps) => {
   const audioHandler = new AudioHandler()
 
-  const handleNextLevelClick = (e: any) => {
+  const handleNextLevelClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     props.nextLevel(e)
     audioHandler.playClickSound()
   }
