@@ -58,7 +58,7 @@ export class LeaderboardResolver {
   async leaderboard(
     @Ctx() { connection }: ApolloContextType
   ): Promise<LeaderboardResponse[]> {
-    const result: any = await connection.query(`
+    const result = await connection.query(`
       SELECT username, time, experience 
       FROM leaderboard, user 
       WHERE leaderboard.user_id = user.id 
@@ -66,6 +66,8 @@ export class LeaderboardResolver {
       LIMIT 50
     `)
 
-    return result[0]
+    const leaderboardResult = result[0] as LeaderboardResponse[]
+
+    return leaderboardResult
   }
 }
