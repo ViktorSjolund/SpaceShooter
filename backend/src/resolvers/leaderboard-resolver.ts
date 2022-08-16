@@ -18,21 +18,24 @@ export class LeaderboardResolver {
     @Arg('time', () => String) time: string,
     @Ctx() { connection, req }: ApolloContextType
   ) {
-    const result: any = await connection.query(`
+    const result = await connection.query(`
       SELECT time 
       FROM leaderboard 
       WHERE user_id = ${req.session.userId}
     `)
 
-    if (!result[0][0]) {
+    const leaderboardResult = result[0] as LeaderboardResponse[]
+    const leaderboard = leaderboardResult[0]
+
+    if (!leaderboard) {
       await connection.query(`
         INSERT INTO leaderboard (id, user_id, time) 
         VALUES(${null}, ${req.session.userId}, '${time}')
       `)
     }
 
-    if (result[0][0].time) {
-      const bestTime = parseInt(result[0][0].time)
+    if (leaderboard.time) {
+      const bestTime = parseInt(leaderboard.time)
 
       if (parseInt(time) > bestTime) {
         await connection.query(`

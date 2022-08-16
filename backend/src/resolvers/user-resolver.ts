@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import { ApolloContextType } from '../types/context'
 import { UserResponse } from './responses/user-response'
 import { RegisterResponse } from './responses/register-response'
+import { User } from '../entities/user'
 
 /**
  * A resolver for handling user events.
@@ -65,12 +66,14 @@ export class UserResolver {
       }
     }
 
-    const result: any = await connection.query(
+    const result = await connection.query(
       `SELECT * FROM user WHERE (id = ${req.session.userId})`
     )
 
+    const userResult = result[0] as User[]
+
     return {
-      user: result[0][0],
+      user: userResult[0],
     }
   }
 
@@ -82,7 +85,7 @@ export class UserResolver {
   @Mutation(() => Boolean)
   logout(@Ctx() { req }: ApolloContextType) {
     let response = true
-    req.session.destroy((err: any) => {
+    req.session.destroy(err => {
       if (err) {
         response = false
       }
@@ -103,11 +106,13 @@ export class UserResolver {
     @Arg('password', () => String) password: string,
     @Ctx() { connection, req }: ApolloContextType
   ): Promise<UserResponse> {
-    const result: any = await connection.query(
+    const result = await connection.query(
       `SELECT * FROM user WHERE (username = '${username}')`
     )
 
-    if (result[0].length === 0) {
+    const userResult = result[0] as User[]
+
+    if (userResult.length === 0) {
       return {
         errors: [
           {
@@ -117,7 +122,7 @@ export class UserResolver {
         ],
       }
     }
-    const user = result[0][0]
+    const user = userResult[0]
 
     const isValidPw = await bcrypt.compare(password, user.password)
 

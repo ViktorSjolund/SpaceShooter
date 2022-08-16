@@ -18,14 +18,14 @@ export class UpgradesResolver {
     @Arg('character_id', () => Int) characterId: number,
     @Ctx() { connection, req }: ApolloContextType
   ): Promise<Upgrades[]> {
-    const upgrades: any = await connection.query(`
+    const result = await connection.query(`
       SELECT * 
       FROM upgrades 
       WHERE user_id = ${req.session.userId} 
       AND character_id = ${characterId}
     `)
 
-    return upgrades[0]
+    return result[0] as Upgrades[]
   }
 
   /**
@@ -41,15 +41,17 @@ export class UpgradesResolver {
     @Arg('character_id', () => Int) characterId: number,
     @Ctx() { connection, req }: ApolloContextType
   ): Promise<Boolean> {
-    const result: any = await connection.query(`
+    const result = await connection.query(`
       SELECT * 
       FROM upgrades 
       WHERE (user_id = ${req.session.userId} 
       AND upgrade_id = ${upgradeId} 
       AND character_id = ${characterId})
     `)
+
+    const upgrade = result[0] as Upgrades[]
     
-    if (result[0][0]) {
+    if (upgrade) {
       return false
     }
 
