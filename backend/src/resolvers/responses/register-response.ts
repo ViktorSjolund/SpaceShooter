@@ -10,5 +10,5 @@ export class RegisterResponse {
   errors?: FieldError[]
 
   @Field(() => Boolean, { nullable: true })
-  success?: Boolean
+  success?: boolean
 }

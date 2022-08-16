@@ -9,7 +9,9 @@ import cors from 'cors'
 import session from 'express-session'
 import { UpgradesResolver } from '../src/resolvers/upgrades-resolver'
 import { LeaderboardResolver } from '../src/resolvers/leaderboard-resolver'
-const MySQLStore = require('express-mysql-session')(session)
+import MySQLStore from 'express-mysql-session'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const MySQLSessionStore = require('express-mysql-session')(session)
 import * as mysql from 'mysql2/promise'
 import http from 'http'
 
@@ -37,11 +39,11 @@ const main = async () => {
     session({
       name: 'auth',
       secret: process.env.SESSION_SECRET!,
-      store: new MySQLStore(
+      store: new MySQLSessionStore(
         {
           createDatabaseTable: true,
           clearExpired: true,
-        },
+        } as MySQLStore.Options,
         connection
       ),
       cookie: {

@@ -20,7 +20,7 @@ export class UserResolver {
   async updateCurrency(
     @Arg('currency', () => Int) currency: number,
     @Ctx() { connection, req }: ApolloContextType
-  ): Promise<Boolean> {
+  ): Promise<boolean> {
     await connection.query(
       `UPDATE user SET currency = currency + ${currency} WHERE id = ${req.session.userId}`
     )
@@ -38,7 +38,7 @@ export class UserResolver {
   async updateExperience(
     @Arg('experience', () => Int) experience: number,
     @Ctx() { connection, req }: ApolloContextType
-  ): Promise<Boolean> {
+  ): Promise<boolean> {
     await connection.query(
       `UPDATE user SET experience = experience + ${experience} WHERE id = ${req.session.userId}`
     )

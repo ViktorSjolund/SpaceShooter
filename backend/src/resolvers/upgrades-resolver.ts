@@ -40,7 +40,7 @@ export class UpgradesResolver {
     @Arg('upgrade_id', () => Int) upgradeId: number,
     @Arg('character_id', () => Int) characterId: number,
     @Ctx() { connection, req }: ApolloContextType
-  ): Promise<Boolean> {
+  ): Promise<boolean> {
     const result = await connection.query(`
       SELECT * 
       FROM upgrades 
