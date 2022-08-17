@@ -13,7 +13,11 @@ export const GameOver = (props: TGameOverProps) => {
   return (
     <div className='game-over-wrapper'>
       <div className='game-over-text'>Game Over!</div>
-      <div> You earned {props.currencyEarned} coins</div>
+      <div> You earned 
+        {' '}
+        <span style={{ color: 'green' }}>{props.currencyEarned}</span>
+        {' '}coin(s)
+      </div>
       <Link to='/play' onClick={handleTryAgainClick}>
         Try Again
       </Link>

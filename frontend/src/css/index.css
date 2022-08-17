@@ -200,10 +200,9 @@ body {
   padding: 15px;
   cursor: pointer;
   border: 0;
-  border-radius: 5px;
   color: black;
   text-decoration: none;
-  background-color: lightgrey;
+  background-color: white;
   text-align: center;
   line-height: max-content;
 }
@@ -312,8 +311,7 @@ canvas {
   font-size: 25px;
   cursor: pointer;
   border: 0;
-  border-radius: 5px;
-  background-color: lightgrey;
+  background-color: white;
   display: inline-block;
   text-align: center;
   line-height: 60px;
@@ -322,6 +320,7 @@ canvas {
 .paused-wrapper div:first-child {
   color: white;
   font-size: 40px;
+  user-select: none;
 }
 
 .paused-wrapper div a {
@@ -353,8 +352,7 @@ canvas {
   font-size: 25px;
   cursor: pointer;
   border: 0;
-  border-radius: 5px;
-  background-color: lightgrey;
+  background-color: white;
   display: inline-block;
   text-align: center;
   line-height: 60px;
