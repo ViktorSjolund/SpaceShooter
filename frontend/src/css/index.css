@@ -624,6 +624,11 @@ canvas {
   align-items: center;
 }
 
+.loading > h1 {
+  color: white;
+  width: 140px;
+}
+
 .loading > img {
   width: 80px;
   height: 80px;
