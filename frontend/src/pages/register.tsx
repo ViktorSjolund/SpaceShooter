@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { AiOutlineLoading } from 'react-icons/ai'
 import { Link, useNavigate } from 'react-router-dom'
 import { MeDocument, useRegisterMutation } from '../generated/graphql'
 
@@ -10,6 +11,7 @@ export const Register = () => {
   let [usernameErr, setUsernameErr] = useState('')
   let [repasswordErr, setRepasswordErr] = useState('')
   let [repassword, setRepassword] = useState('')
+  let [isRegistering, setIsRegistering] = useState(false)
   const navigate = useNavigate()
 
   const handlePasswordChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -29,6 +31,7 @@ export const Register = () => {
     setPasswordErr('')
     setUsernameErr('')
     setRepasswordErr('')
+    setIsRegistering(true)
     if (password !== repassword) {
       setRepasswordErr('Passwords needs to be matching.')
       return
@@ -49,6 +52,7 @@ export const Register = () => {
         setUsernameErr(result.data.register.errors[0].message)
       }
     }
+    setIsRegistering(false)
   }
 
   return (
@@ -78,7 +82,15 @@ export const Register = () => {
           <Link to='/login'>
             <span>Already have an account?</span>
           </Link>
-          <button type='submit'> Register </button>
+          <div className='form-submit'>
+          {isRegistering ? 
+            <AiOutlineLoading 
+              fill='black'
+              size={22}
+            /> :
+            <button type='submit'>Register</button>
+          }
+          </div>
         </form>
       </div>
     </div>

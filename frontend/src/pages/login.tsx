@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { Loading } from '../components/loading'
 import { useLoginLazyQuery, useMeQuery } from '../generated/graphql'
 import { TLoginProps } from '../types/types'
+import { AiOutlineLoading } from 'react-icons/ai'
 
 export const Login = (props: TLoginProps) => {
   const { loading, data } = useMeQuery()
@@ -11,6 +12,7 @@ export const Login = (props: TLoginProps) => {
   let [password, setPassword] = useState('')
   let [usernameErr, setUsernameErr] = useState('')
   let [passwordErr, setPasswordErr] = useState('')
+  let [isLoggingIn, setIsLoggingIn] = useState(false)
   const navigate = useNavigate()
 
   const handlePasswordChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -25,6 +27,7 @@ export const Login = (props: TLoginProps) => {
     e.preventDefault()
     setUsernameErr('')
     setPasswordErr('')
+    setIsLoggingIn(true)
     const result = await loginUser({
       variables: {
         username,
@@ -42,6 +45,7 @@ export const Login = (props: TLoginProps) => {
         setUsernameErr(result.data.login.errors[0].message)
       }
     }
+    setIsLoggingIn(false)
   }
 
   if (loading) return <Loading />
@@ -70,7 +74,15 @@ export const Login = (props: TLoginProps) => {
           <Link to='/register'>
             <span>Create an account</span>
           </Link>
-          <button type='submit'> Login </button>
+          <div className='form-submit'>
+          {isLoggingIn ? 
+            <AiOutlineLoading 
+              fill='black'
+              size={22}
+            /> :
+            <button type='submit'>Login</button>
+          }
+          </div>
         </form>
       </div>
     </div>
