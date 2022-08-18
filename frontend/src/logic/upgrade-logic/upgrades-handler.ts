@@ -114,7 +114,6 @@ export class UpgradesHandler {
       ],
     }) as AddUpgradeMutationResult
 
-
     if (result.error) {
       return false
     }

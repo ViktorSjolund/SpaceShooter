@@ -51,7 +51,7 @@ export class UpgradesResolver {
 
     const upgrade = result[0] as Upgrades[]
     
-    if (upgrade) {
+    if (upgrade.length > 0) {
       return false
     }
 
