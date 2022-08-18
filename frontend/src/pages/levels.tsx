@@ -24,45 +24,19 @@ export const Levels = (props: TLevelsProps) => {
     <div className='levels-wrapper'>
       <span>Levels</span>
       <MenuButton />
-      <div>
-        <Link to='/play' onClick={() => handleLevelClick(LEVEL.ONE)}>
-          Level 1
-        </Link>
-      </div>
-      <div>
-        <Link to='/play' onClick={() => handleLevelClick(LEVEL.TWO)}>
-          Level 2
-        </Link>
-      </div>
-      <div>
-        <Link to='/play' onClick={() => handleLevelClick(LEVEL.ONE)}>
-          Level 3
-        </Link>
-      </div>
-      <div>
-        <Link to='/play' onClick={() => handleLevelClick(LEVEL.ONE)}>
-          Level 4
-        </Link>
-      </div>
-      <div>
-        <Link to='/play' onClick={() => handleLevelClick(LEVEL.ONE)}>
-          Level 5
-        </Link>
-      </div>
-      <div>
-        <Link to='/play' onClick={() => handleLevelClick(LEVEL.ONE)}>
-          Level 6
-        </Link>
-      </div>
-      <div>
-        <Link
-          to='/play'
-          className='endless-mode'
-          onClick={() => handleLevelClick(LEVEL.ENDLESS)}
-        >
-          Endless Mode
-        </Link>
-      </div>
+      <Link 
+        to='/play' 
+        onClick={(e) => e.preventDefault()}
+        style={{ cursor: 'not-allowed' }}
+        className='level-mode'>
+        Campaign
+      </Link>
+      <Link
+        to='/play'
+        className='level-mode'
+        onClick={() => handleLevelClick(LEVEL.ENDLESS)}>
+        Endless Mode
+      </Link>
     </div>
   )
 }
