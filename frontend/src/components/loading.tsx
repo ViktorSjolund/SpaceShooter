@@ -9,7 +9,7 @@ export const Loading = () => {
     let i = 1
 
     setInterval(() => {
-      if (i === maxDots + 1) {
+      if (i > maxDots) {
         i = 1
       }
       setDots(dot.repeat(i))
