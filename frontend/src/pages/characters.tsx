@@ -58,13 +58,6 @@ export const Characters = (props: TCharactersProps) => {
             </button>
           )}
         </div>
-        <div>
-          {props.charpicker.chosenCharacter === CHARACTER.THREE ? (
-            <button className='selected'>Selected</button>
-          ) : (
-            <button onClick={() => handleClick(CHARACTER.THREE)}>Select</button>
-          )}
-        </div>
       </div>
     </div>
   )
