@@ -1,25 +1,32 @@
 import { useEffect, useState } from 'react'
 
 export const Loading = () => {
-  let [dots, setDots] = useState('')
+  let [dots, setDots] = useState('.')
+  let [dotInterval, setDotInterval] = useState<NodeJS.Timer | null>(null)
 
   const handleDots = () => {
     const dot = '.'
     const maxDots = 3
     let i = 1
 
-    setInterval(() => {
+    setDotInterval(setInterval(() => {
       if (i > maxDots) {
         i = 1
       }
       setDots(dot.repeat(i))
       i++
-    }, 500)
+    }, 500))
   }
 
   useEffect(() => {
     handleDots()
-  }, [])
+
+    return () => {
+      if (dotInterval) {
+        clearInterval(dotInterval)
+      }
+    }
+  }, [dotInterval])
 
   return (
     <div className='wrapper'>
