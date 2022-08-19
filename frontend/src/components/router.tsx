@@ -18,7 +18,14 @@ export const AppRouter = (props: TAppRouterProps) => {
   const characterPicker = new CharacterPicker()
   const audioHandler = new AudioHandler()
   const playerLevelHandler = new PlayerLevelHandler()
-  audioHandler.initThemeSong()
+  audioHandler.playThemeSong()
+
+  window.addEventListener('click', (e: MouseEvent) => {
+    const target = e.target as HTMLElement
+    if (target.nodeName === 'A') {
+      audioHandler.playClickSound()
+    }
+  })
 
   return (
     <Router>

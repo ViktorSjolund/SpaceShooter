@@ -207,7 +207,7 @@ body {
   line-height: max-content;
 }
 
-.game-over-wrapper div {
+.game-over-wrapper div:not(:last-child) {
   width: max-content;
   height: max-content;
   font-size: 50px;
@@ -282,7 +282,7 @@ canvas {
   left: 0;
 }
 
-.paused-wrapper div:not(:first-child) {
+.paused-wrapper div:not(:first-child):not(:last-child) {
   width: 190px;
   height: 60px;
   margin-top: 10px;
@@ -554,12 +554,28 @@ canvas {
   position: absolute;
   bottom: 20px;
   right: 20px;
-  width: 40px;
+  width: 80px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+}
+
+.volume-controller > input {
+  position: absolute;
   height: 40px;
+  width: 120px;
+  display: block;
+  top: 50px;
+  cursor: pointer;
 }
 
 .volume-controller > svg {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  bottom: 5px;
   cursor: pointer;
+  display: block;
 }
 
 .leaderboard-wrapper {

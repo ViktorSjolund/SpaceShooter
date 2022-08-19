@@ -20,6 +20,10 @@ export type TUpgrade = {
   characters: CHARACTER[]
 }
 
+export type TVolumeProps = {
+  audioHandler: AudioHandler
+}
+
 export type TCharactersProps = {
   charpicker: CharacterPicker
   lvlhandler: PlayerLevelHandler
@@ -76,6 +80,7 @@ export type TLoginProps = {
 export type TPausedProps = {
   game: Game
   handleResumeClick: () => void
+  audioHandler: AudioHandler
 }
 
 export type THomeProps = {
@@ -86,11 +91,13 @@ export type THomeProps = {
 export type TGameOverProps = {
   tryAgain: MouseEventHandler<HTMLAnchorElement>
   currencyEarned: number
+  audioHandler: AudioHandler
 }
 
 export type TGameWonProps = {
   nextLevel: MouseEventHandler<HTMLAnchorElement>
   currencyEarned: number
+  audioHandler: AudioHandler
 }
 
 export type TLevelsProps = {

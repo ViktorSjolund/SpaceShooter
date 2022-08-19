@@ -2,16 +2,26 @@
  * Handles the game's audio.
  */
 export class AudioHandler {
+  #volume
+  #volumeMultiplier
   #themeSong: HTMLAudioElement | null
-  #isThemePlaying
 
   constructor() {
     this.#themeSong = null
-    this.#isThemePlaying = false
+    this.#volumeMultiplier = 0
+    this.#volume = 0
   }
 
-  get isThemePlaying() {
-    return this.#isThemePlaying
+  get volume() {
+    return this.#volume
+  }
+
+  set volume(value: number) {
+    this.#volume = value
+  }
+
+  set volumeMultiplier(value: number) {
+    this.#volumeMultiplier = value
   }
 
   /**
@@ -19,34 +29,21 @@ export class AudioHandler {
    */
   playClickSound() {
     const clickSound = new Audio('/sound/click.mp3')
-    clickSound.volume = 0.2
+    clickSound.volume = 0.2 * this.#volumeMultiplier
     clickSound.play()
-  }
-
-  /**
-   * Pauses the theme song.
-   */
-  pauseThemeSong() {
-    if (!this.#themeSong) return
-    this.#themeSong.pause()
-    this.#isThemePlaying = false
   }
 
   /**
    * Plays the theme song.
    */
   playThemeSong() {
-    if (!this.#themeSong) return
-    this.#themeSong.play()
-    this.#isThemePlaying = true
-  }
-
-  /**
-   * Initializes the theme song.
-   */
-  initThemeSong() {
     this.#themeSong = new Audio('/sound/themesong.ogg')
     this.#themeSong.loop = true
-    this.#themeSong.volume = 0.02
+    this.refreshThemeVolume()
+    this.#themeSong.play()
+  }
+
+  refreshThemeVolume() {
+    this.#themeSong!.volume = 0.02 * this.#volumeMultiplier
   }
 }

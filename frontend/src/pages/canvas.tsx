@@ -92,12 +92,17 @@ export const Canvas = (props: TGameCanvasProps) => {
         <GameOver
           tryAgain={handleTryAgain}
           currencyEarned={game!.currencyEarned}
+          audioHandler={props.audiohandler}
         />
       ) : (
         <></>
       )}
       {gamestate === GAME_STATE.PAUSED ? (
-        <Paused game={game!} handleResumeClick={handleResumeClick} />
+        <Paused 
+          game={game!} 
+          handleResumeClick={handleResumeClick} 
+          audioHandler={props.audiohandler}
+        />
       ) : (
         <></>
       )}
@@ -105,6 +110,7 @@ export const Canvas = (props: TGameCanvasProps) => {
         <GameWon
           nextLevel={handleNextLevelClick}
           currencyEarned={game!.currencyEarned}
+          audioHandler={props.audiohandler}
         />
       ) : (
         <></>

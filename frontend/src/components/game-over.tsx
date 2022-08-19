@@ -1,13 +1,10 @@
 import { Link } from 'react-router-dom'
 import { TGameOverProps } from '../types/types'
-import { AudioHandler } from '../misc/audio-handler'
+import { VolumeControl } from './volume-control'
 
 export const GameOver = (props: TGameOverProps) => {
-  const audioHandler = new AudioHandler()
-
   const handleTryAgainClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     props.tryAgain(e)
-    audioHandler.playClickSound()
   }
 
   return (
@@ -21,9 +18,10 @@ export const GameOver = (props: TGameOverProps) => {
       <Link to='/play' onClick={handleTryAgainClick}>
         Try Again
       </Link>
-      <Link onClick={audioHandler.playClickSound} to='/'>
+      <Link to='/'>
         Main Menu
       </Link>
+      <VolumeControl audioHandler={props.audioHandler}/>
     </div>
   )
 }

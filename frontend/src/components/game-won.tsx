@@ -1,13 +1,10 @@
 import { Link } from 'react-router-dom'
 import { TGameWonProps } from '../types/types'
-import { AudioHandler } from '../misc/audio-handler'
+import { VolumeControl } from './volume-control'
 
 export const GameWon = (props: TGameWonProps) => {
-  const audioHandler = new AudioHandler()
-
   const handleNextLevelClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     props.nextLevel(e)
-    audioHandler.playClickSound()
   }
 
   return (
@@ -21,11 +18,12 @@ export const GameWon = (props: TGameWonProps) => {
         </Link>
       </div>
       <div>
-        <Link onClick={audioHandler.playClickSound} to='/'>
+        <Link to='/'>
           {' '}
           Main Menu{' '}
         </Link>
       </div>
+      <VolumeControl audioHandler={props.audioHandler} />
     </div>
   )
 }

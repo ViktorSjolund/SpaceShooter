@@ -1,14 +1,11 @@
 import { Link } from 'react-router-dom'
 import { TPausedProps } from '../types/types'
 import { GAME_STATE } from '../logic/util/enums'
-import { AudioHandler } from '../misc/audio-handler'
+import { VolumeControl } from './volume-control'
 
 export const Paused = (props: TPausedProps) => {
-  const audioHandler = new AudioHandler()
-
   const handleMenuClick = () => {
     props.game.gamestate = GAME_STATE.OVER
-    audioHandler.playClickSound()
   }
 
   return (
@@ -20,6 +17,7 @@ export const Paused = (props: TPausedProps) => {
           Main Menu
         </Link>
       </div>
+      <VolumeControl audioHandler={props.audioHandler} />
     </div>
   )
 }
