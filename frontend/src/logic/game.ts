@@ -113,10 +113,7 @@ export class Game {
       if (e.key === 'Escape') {
         if (this.#gamestate === GAME_STATE.PAUSED) {
           this.unpause()
-        } else if (
-          this.#gamestate !== GAME_STATE.OVER &&
-          this.#gamestate !== GAME_STATE.WON
-        ) {
+        } else {
           this.#pause()
         }
       } else if (e.key === ' ') {
@@ -132,6 +129,12 @@ export class Game {
    * Pauses the game.
    */
   #pause() {
+    if (
+      this.#gamestate === GAME_STATE.WON ||
+      this.#gamestate === GAME_STATE.OVER
+    ) {
+      return
+    }
     this.#gamestate = GAME_STATE.PAUSED
     this.#stateChangeCb(this.#gamestate)
     this.#timer.startPausedTime()
