@@ -12,16 +12,15 @@ export const GameWon = (props: TGameWonProps) => {
       <div>Level Complete!</div>
       <div> You earned {props.currencyEarned} coins</div>
       <div>
-        <Link to='/play' onClick={handleNextLevelClick}>
-          {' '}
-          Next Level{' '}
+        <Link
+          to='/play'
+          onClick={handleNextLevelClick}
+        >
+          Next Level
         </Link>
       </div>
       <div>
-        <Link to='/'>
-          {' '}
-          Main Menu{' '}
-        </Link>
+        <Link to='/'> Main Menu </Link>
       </div>
       <VolumeControl audioHandler={props.audioHandler} />
     </div>

@@ -24,7 +24,6 @@ export class User {
   @Column()
   updated_at!: string
 
-
   @Field(() => Int, { nullable: true })
   @Column()
   currency?: number

@@ -4,7 +4,7 @@
 export class PlayerLevelHandler {
   /**
    * Calculates the player's current level.
-   * 
+   *
    * @param playerXp The player's current xp.
    * @returns The player's level.
    */
@@ -14,17 +14,17 @@ export class PlayerLevelHandler {
 
   /**
    * Calculates the player's current xp.
-   * 
+   *
    * @param level The player's current level.
    * @returns The player's xp.
    */
   levelToXp(level: number) {
-    return Math.pow(((level - 1) * 20), 2) 
+    return Math.pow((level - 1) * 20, 2)
   }
 
   /**
    * Calculates the progress towards the next level.
-   * 
+   *
    * @param currentLevel The player's level.
    * @param currentXp The player's xp.
    * @returns A unit interval of the progress towards the next level.

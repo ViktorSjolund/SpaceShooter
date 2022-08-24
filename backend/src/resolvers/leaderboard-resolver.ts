@@ -9,7 +9,7 @@ import { LeaderboardResponse } from './responses/leaderboard-response'
 export class LeaderboardResolver {
   /**
    * Updates the leaderboard with a new time.
-   * 
+   *
    * @param time The total time the player survived formated as (MM:SS:MSMSMS).
    * @returns True if everything went as expected.
    */
@@ -44,20 +44,18 @@ export class LeaderboardResolver {
           WHERE user_id = ${req.session.userId}
         `)
       }
-    } 
+    }
 
     return true
   }
 
   /**
    * Fetches the leaderboard's top 50 results.
-   * 
+   *
    * @returns An array of the leaderboard.
    */
   @Query(() => [LeaderboardResponse])
-  async leaderboard(
-    @Ctx() { connection }: ApolloContextType
-  ): Promise<LeaderboardResponse[]> {
+  async leaderboard(@Ctx() { connection }: ApolloContextType): Promise<LeaderboardResponse[]> {
     const result = await connection.query(`
       SELECT username, time, experience 
       FROM leaderboard, user 

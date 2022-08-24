@@ -29,12 +29,8 @@ export class CollisionChecker {
    */
   checkCircleRectCollision(circle: TEntity, rect: TEntity) {
     const circleRad = circle.size.width
-    const distX = Math.abs(
-      circle.position.x - rect.position.x - rect.size.width / 2
-    )
-    const distY = Math.abs(
-      circle.position.y - rect.position.y - rect.size.height / 2
-    )
+    const distX = Math.abs(circle.position.x - rect.position.x - rect.size.width / 2)
+    const distY = Math.abs(circle.position.y - rect.position.y - rect.size.height / 2)
 
     if (distX > rect.size.width / 2 + circleRad) {
       return false

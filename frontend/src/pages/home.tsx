@@ -16,20 +16,12 @@ export const Home = (props: THomeProps) => {
   return (
     <div className='wrapper menu'>
       <div>Space Shooter</div>
-      <Link to='/levels'>
-        Levels
-      </Link>
-      <Link to='/upgrades'>
-        Upgrades
-      </Link>
-      <Link to='/characters'>
-        Characters
-      </Link>
-      <Link to='/leaderboard'>
-        Leaderboard
-      </Link>
+      <Link to='/levels'>Levels</Link>
+      <Link to='/upgrades'>Upgrades</Link>
+      <Link to='/characters'>Characters</Link>
+      <Link to='/leaderboard'>Leaderboard</Link>
       <UserInfo lvlhandler={props.lvlhandler} />
-      <VolumeControl audioHandler={props.audiohandler}/>
+      <VolumeControl audioHandler={props.audiohandler} />
     </div>
   )
 }

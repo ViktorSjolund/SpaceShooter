@@ -39,9 +39,9 @@ export const Register = () => {
     const result = await registerUser({
       variables: {
         username,
-        password
+        password,
       },
-      refetchQueries: [{ query: MeDocument }]
+      refetchQueries: [{ query: MeDocument }],
     })
     if (result.data?.register.success) {
       navigate('/login', { replace: true })
@@ -61,35 +61,37 @@ export const Register = () => {
         <form onSubmit={handleSubmit}>
           <span> Register </span>
           <label>Username</label>
-          <input 
-            onChange={handleUsernameChange} 
-            style={{ borderColor: usernameErr ? 'red': ''}}/>
+          <input
+            onChange={handleUsernameChange}
+            style={{ borderColor: usernameErr ? 'red' : '' }}
+          />
           <span className='form-error-text'>{usernameErr}</span>
           <label>Password</label>
-          <input 
-            onChange={handlePasswordChange} 
-            type='password' 
+          <input
+            onChange={handlePasswordChange}
+            type='password'
             style={{ borderColor: passwordErr ? 'red' : '' || repasswordErr ? 'red' : '' }}
           />
           <span className='form-error-text'>{passwordErr}</span>
           <label>Confirm Password </label>
-          <input 
-            onChange={handleRepasswordChange} 
-            type='password' 
-            style={{ borderColor: repasswordErr ? 'red': ''}}
+          <input
+            onChange={handleRepasswordChange}
+            type='password'
+            style={{ borderColor: repasswordErr ? 'red' : '' }}
           />
           <span className='form-error-text'>{repasswordErr}</span>
           <Link to='/login'>
             <span>Already have an account?</span>
           </Link>
           <div className='form-submit'>
-          {isRegistering ? 
-            <AiOutlineLoading 
-              fill='black'
-              size={22}
-            /> :
-            <button type='submit'>Register</button>
-          }
+            {isRegistering ? (
+              <AiOutlineLoading
+                fill='black'
+                size={22}
+              />
+            ) : (
+              <button type='submit'>Register</button>
+            )}
           </div>
         </form>
       </div>

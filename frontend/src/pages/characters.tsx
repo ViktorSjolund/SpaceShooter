@@ -35,13 +35,14 @@ export const Characters = (props: TCharactersProps) => {
           <span>
             <b>Gunner</b>
           </span>
-          <img src='/img/spaceship.png' alt='' />
+          <img
+            src='/img/spaceship.png'
+            alt=''
+          />
           {props.charpicker.chosenCharacter === CHARACTER.GUNNER ? (
             <button className='selected'>Selected</button>
           ) : (
-            <button onClick={() => handleClick(CHARACTER.GUNNER)}>
-              Select
-            </button>
+            <button onClick={() => handleClick(CHARACTER.GUNNER)}>Select</button>
           )}
         </div>
         <div>
@@ -49,13 +50,14 @@ export const Characters = (props: TCharactersProps) => {
           <span>
             <b>Beamer</b>
           </span>
-          <img src='/img/beamer.png' alt='' />
+          <img
+            src='/img/beamer.png'
+            alt=''
+          />
           {props.charpicker.chosenCharacter === CHARACTER.BEAMER ? (
             <button className='selected'>Selected</button>
           ) : (
-            <button onClick={() => handleClick(CHARACTER.BEAMER)}>
-              Select
-            </button>
+            <button onClick={() => handleClick(CHARACTER.BEAMER)}>Select</button>
           )}
         </div>
       </div>

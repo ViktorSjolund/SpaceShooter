@@ -33,7 +33,10 @@ export const AppRouter = (props: TAppRouterProps) => {
         <Route
           path='/'
           element={
-            <Home lvlhandler={playerLevelHandler} audiohandler={audioHandler} />
+            <Home
+              lvlhandler={playerLevelHandler}
+              audiohandler={audioHandler}
+            />
           }
         />
         <Route
@@ -58,9 +61,18 @@ export const AppRouter = (props: TAppRouterProps) => {
             />
           }
         />
-        <Route path='/levels' element={<Levels lvlpicker={levelPicker} />} />
-        <Route path='login' element={<Login client={props.client} />} />
-        <Route path='register' element={<Register />} />
+        <Route
+          path='/levels'
+          element={<Levels lvlpicker={levelPicker} />}
+        />
+        <Route
+          path='login'
+          element={<Login client={props.client} />}
+        />
+        <Route
+          path='register'
+          element={<Register />}
+        />
         <Route
           path='characters'
           element={

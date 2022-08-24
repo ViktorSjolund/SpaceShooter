@@ -20,15 +20,7 @@ export class Gunner implements CharacterInterface {
   #explosions: Explosion[]
   #enemies
 
-  constructor({
-    position,
-    images,
-    canvasRef,
-    size,
-    properties,
-    velocity,
-    enemies,
-  }: TCharacter) {
+  constructor({ position, images, canvasRef, size, properties, velocity, enemies }: TCharacter) {
     this.#position = position
     this.#images = images
     this.#canvasRef = canvasRef

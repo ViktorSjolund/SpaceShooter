@@ -1,10 +1,6 @@
 import { NormalizedCacheObject } from '@apollo/client/cache/inmemory/types'
 import { ApolloClient } from '@apollo/client/core/ApolloClient'
-import type {
-  TAddUpgradeResponse,
-  TCouldPurchaseResponse,
-  TUpgrade,
-} from '@/types/types'
+import type { TAddUpgradeResponse, TCouldPurchaseResponse, TUpgrade } from '@/types/types'
 import {
   AddUpgradeDocument,
   AddUpgradeMutationResult,
@@ -46,9 +42,9 @@ export class UpgradesHandler {
     upgrade: TUpgrade,
     lvlHandler: PlayerLevelHandler
   ): Promise<TCouldPurchaseResponse> {
-    const result = await this.#apolloClient.query({
+    const result = (await this.#apolloClient.query({
       query: MeDocument,
-    }) as MeQueryResult
+    })) as MeQueryResult
 
     if (result.error || !result.data?.me.user) {
       return {
@@ -90,12 +86,8 @@ export class UpgradesHandler {
    * @param characterId The character id the upgrade applies to.
    * @returns False if the upgrade could not be added to the database.
    */
-  async #addUpgradeToDb(
-    upgradeId: number,
-    cost: number,
-    characterId: CHARACTER
-  ): Promise<Boolean> {
-    const result = await this.#apolloClient.mutate({
+  async #addUpgradeToDb(upgradeId: number, cost: number, characterId: CHARACTER): Promise<Boolean> {
+    const result = (await this.#apolloClient.mutate({
       mutation: AddUpgradeDocument,
       variables: {
         characterId,
@@ -112,14 +104,14 @@ export class UpgradesHandler {
           query: MeDocument,
         },
       ],
-    }) as AddUpgradeMutationResult
+    })) as AddUpgradeMutationResult
 
     if (result.error) {
       return false
     }
 
     if (result.data?.addUpgrade) {
-      await this.#apolloClient.mutate({
+      ;(await this.#apolloClient.mutate({
         mutation: UpdateCurrencyDocument,
         variables: {
           currency: -cost,
@@ -135,7 +127,7 @@ export class UpgradesHandler {
             query: MeDocument,
           },
         ],
-      }) as UpdateCurrencyMutationResult
+      })) as UpdateCurrencyMutationResult
     }
 
     return true
@@ -154,12 +146,12 @@ export class UpgradesHandler {
     characterId: CHARACTER,
     lvlHandler: PlayerLevelHandler
   ): Promise<TAddUpgradeResponse> {
-    const result = await this.#apolloClient.query({
+    const result = (await this.#apolloClient.query({
       query: UpgradesDocument,
       variables: {
         characterId,
       },
-    }) as UpgradesQueryResult
+    })) as UpgradesQueryResult
 
     if (result.error || !result.data?.upgrades) {
       return {

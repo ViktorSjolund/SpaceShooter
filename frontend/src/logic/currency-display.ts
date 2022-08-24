@@ -16,7 +16,7 @@ export class CurrencyDisplay {
 
   /**
    * Draws the total amount of currency earned and the most recent amount of currency earned.
-   * 
+   *
    * @param currency The total amount of currency earned.
    */
   #draw(currency: number) {
@@ -40,7 +40,7 @@ export class CurrencyDisplay {
 
   /**
    * Updates the currency earned display.
-   * 
+   *
    * @param currency The total amount of currency earned.
    */
   update(currency: number) {

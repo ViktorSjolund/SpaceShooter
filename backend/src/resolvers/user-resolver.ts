@@ -12,7 +12,7 @@ import { User } from '../entities/user'
 export class UserResolver {
   /**
    * Adds a new currency amount to the already existing currency the user has.
-   * 
+   *
    * @param currency The currency amount to be added.
    * @returns True if it successfully added the currency.
    */
@@ -30,7 +30,7 @@ export class UserResolver {
 
   /**
    * Adds a new experience amount to the already existing experience the user has.
-   * 
+   *
    * @param experience The experience amount to be added.
    * @returns True if it succesfully added the experience.
    */
@@ -48,13 +48,11 @@ export class UserResolver {
 
   /**
    * Gets the current logged in user.
-   * 
+   *
    * @returns An object with the user or an error if unauthorized.
    */
   @Query(() => UserResponse)
-  async me(
-    @Ctx() { connection, req }: ApolloContextType
-  ): Promise<UserResponse> {
+  async me(@Ctx() { connection, req }: ApolloContextType): Promise<UserResponse> {
     if (!req.session.userId) {
       return {
         errors: [
@@ -66,9 +64,7 @@ export class UserResolver {
       }
     }
 
-    const result = await connection.query(
-      `SELECT * FROM user WHERE (id = ${req.session.userId})`
-    )
+    const result = await connection.query(`SELECT * FROM user WHERE (id = ${req.session.userId})`)
 
     const userResult = result[0] as User[]
 
@@ -79,13 +75,13 @@ export class UserResolver {
 
   /**
    * Logout the current user.
-   * 
+   *
    * @returns True if the user successfully logged out.
    */
   @Mutation(() => Boolean)
   logout(@Ctx() { req }: ApolloContextType) {
     let response = true
-    req.session.destroy(err => {
+    req.session.destroy((err) => {
       if (err) {
         response = false
       }
@@ -95,7 +91,7 @@ export class UserResolver {
 
   /**
    * Login a user.
-   * 
+   *
    * @param username The username of the user.
    * @param password The password of the user.
    * @returns An object with the user or an error if the credentials are bad.
@@ -106,9 +102,7 @@ export class UserResolver {
     @Arg('password', () => String) password: string,
     @Ctx() { connection, req }: ApolloContextType
   ): Promise<UserResponse> {
-    const result = await connection.query(
-      `SELECT * FROM user WHERE (username = '${username}')`
-    )
+    const result = await connection.query(`SELECT * FROM user WHERE (username = '${username}')`)
 
     const userResult = result[0] as User[]
 
@@ -146,7 +140,7 @@ export class UserResolver {
 
   /**
    * Registers a new user.
-   * 
+   *
    * @param username The username of the user.
    * @param password The password of the user.
    * @returns An object with a success key or an error if something went bad.

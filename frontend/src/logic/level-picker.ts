@@ -20,7 +20,7 @@ export class LevelPicker {
 
   /**
    * Gets an array of the order in which the levels are positioned.
-   * 
+   *
    * @returns An array of the levels in the correct order.
    */
   getLevelsOrderArray() {

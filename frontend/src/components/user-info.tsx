@@ -22,7 +22,10 @@ export const UserInfo = (props: TUserInfoProps) => {
       <span>{data?.me.user?.username}</span>
       <div>
         <span>{data?.me.user?.currency}</span>
-        <img src='/img/currency.png' alt=''></img>
+        <img
+          src='/img/currency.png'
+          alt=''
+        ></img>
       </div>
       <span>Level {level}</span>
       <div className='xp-bar'>
@@ -31,9 +34,11 @@ export const UserInfo = (props: TUserInfoProps) => {
           style={{ height: `${progress}%` }}
         ></div>
       </div>
-      <span onClick={handleLogout} className='logout'>
-        {' '}
-        Logout{' '}
+      <span
+        onClick={handleLogout}
+        className='logout'
+      >
+        Logout
       </span>
     </div>
   )

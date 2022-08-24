@@ -13,7 +13,10 @@ export const Paused = (props: TPausedProps) => {
       <div> Paused </div>
       <div onClick={props.handleResumeClick}> Resume </div>
       <div>
-        <Link to='/' onClick={handleMenuClick}>
+        <Link
+          to='/'
+          onClick={handleMenuClick}
+        >
           Main Menu
         </Link>
       </div>

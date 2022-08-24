@@ -37,7 +37,7 @@ export class LevelUtil {
 
   /**
    * Gets a random X-position value within the borders of the canvas.
-   * 
+   *
    * @returns The X-position value.
    */
   #randomPosXValue() {
@@ -48,7 +48,7 @@ export class LevelUtil {
 
   /**
    * Adds a gigantor enemy to the game.
-   * 
+   *
    * @param image An image of the gigantor.
    */
   #addGigantor(image: HTMLImageElement) {
@@ -96,7 +96,7 @@ export class LevelUtil {
 
   /**
    * Adds a ufo enemy to the game.
-   * 
+   *
    * @param image An image of the ufo.
    */
   #addUfo(image: HTMLImageElement) {
@@ -139,7 +139,7 @@ export class LevelUtil {
 
   /**
    * Adds an asteroid enemy to the game.
-   * 
+   *
    * @param image An image of the asteroid.
    */
   #addAsteroid(image: HTMLImageElement) {
@@ -184,7 +184,7 @@ export class LevelUtil {
 
   /**
    * Adds a splitter enemy to the game.
-   * 
+   *
    * @param image An image of the splitter.
    */
   #addSplitter(image: HTMLImageElement) {
@@ -229,11 +229,11 @@ export class LevelUtil {
 
   /**
    * Creates the given enemy X amount of times.
-   * 
+   *
    * @param enemyType The enemy that is to be created.
    * @param image The image of the enemy.
    * @param enemyCount The amount of times the enemy is to be created.
-   * @returns 
+   * @returns
    */
   createEnemy(enemyType: ENEMY, image: HTMLImageElement, enemyCount: number) {
     if (this.#game.gamestate === GAME_STATE.PAUSED) {

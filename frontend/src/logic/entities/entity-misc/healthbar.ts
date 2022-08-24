@@ -12,17 +12,15 @@ export class Healthbar {
 
   /**
    * Draws the healthbar for the enemy.
-   * 
-   * @returns 
+   *
+   * @returns
    */
   draw() {
     if (this.#enemy.hitpoints.current === this.#enemy.hitpoints.default) {
       return
     }
-    const redbarWidthOffset =
-      1 - this.#enemy.hitpoints.current / this.#enemy.hitpoints.default
-    const redbarPosOffset =
-      this.#enemy.hitpoints.current / this.#enemy.hitpoints.default
+    const redbarWidthOffset = 1 - this.#enemy.hitpoints.current / this.#enemy.hitpoints.default
+    const redbarPosOffset = this.#enemy.hitpoints.current / this.#enemy.hitpoints.default
 
     this.#enemy.canvasRef.ctx.fillStyle = 'limegreen'
     this.#enemy.canvasRef.ctx.fillRect(

@@ -129,10 +129,7 @@ export class Game {
    * Pauses the game.
    */
   #pause() {
-    if (
-      this.#gamestate === GAME_STATE.WON ||
-      this.#gamestate === GAME_STATE.OVER
-    ) {
+    if (this.#gamestate === GAME_STATE.WON || this.#gamestate === GAME_STATE.OVER) {
       return
     }
     this.#gamestate = GAME_STATE.PAUSED
@@ -189,10 +186,7 @@ export class Game {
     const shootInterval = setInterval(() => {
       if (this.#gamestate === GAME_STATE.PLAYING) {
         this.#player.shoot()
-      } else if (
-        this.#gamestate === GAME_STATE.OVER ||
-        this.#gamestate === GAME_STATE.WON
-      ) {
+      } else if (this.#gamestate === GAME_STATE.OVER || this.#gamestate === GAME_STATE.WON) {
         clearInterval(shootInterval)
       }
     }, this.#player.properties.attackRate)
@@ -258,19 +252,19 @@ export class Game {
    * Applies upgrades for the gunner character.
    */
   async #applyGunnerUpgrades() {
-    const result = await this.#apolloClient.query({
+    const result = (await this.#apolloClient.query({
       query: UpgradesDocument,
       variables: {
         characterId: CHARACTER.GUNNER,
       },
-    }) as UpgradesQueryResult
+    })) as UpgradesQueryResult
 
     if (!result.data?.upgrades) {
       return
     }
 
-    result.data.upgrades.forEach(dbUpgrade => {
-      this.#upgrades.upgrades.forEach(defaultUpgrade => {
+    result.data.upgrades.forEach((dbUpgrade) => {
+      this.#upgrades.upgrades.forEach((defaultUpgrade) => {
         if (dbUpgrade.upgrade_id === defaultUpgrade.id) {
           if (defaultUpgrade.id === UPGRADE_ID.ADD_PROECTILE) {
             this.#player.properties.numberOfProjectiles += 1
@@ -300,19 +294,19 @@ export class Game {
    * Applies upgrades for the beamer character
    */
   async #applyBeamerUpgrades() {
-    const result = await this.#apolloClient.query({
+    const result = (await this.#apolloClient.query({
       query: UpgradesDocument,
       variables: {
         characterId: CHARACTER.BEAMER,
       },
-    }) as UpgradesQueryResult
+    })) as UpgradesQueryResult
 
     if (!result.data?.upgrades) {
       return
     }
 
-    result.data.upgrades.forEach(dbUpgrade => {
-      this.#upgrades.upgrades.forEach(defaultUpgrade => {
+    result.data.upgrades.forEach((dbUpgrade) => {
+      this.#upgrades.upgrades.forEach((defaultUpgrade) => {
         if (dbUpgrade.upgrade_id === defaultUpgrade.id) {
           if (defaultUpgrade.id === UPGRADE_ID.ADD_DAMAGE_TEN) {
             this.#player.properties.damage *= 1.1
@@ -350,12 +344,7 @@ export class Game {
    */
   #clearCanvas() {
     this.#canvasRef.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)'
-    this.#canvasRef.ctx.fillRect(
-      0,
-      0,
-      this.#canvasRef.canvas.width,
-      this.#canvasRef.canvas.height
-    )
+    this.#canvasRef.ctx.fillRect(0, 0, this.#canvasRef.canvas.width, this.#canvasRef.canvas.height)
   }
 
   /**
@@ -508,26 +497,26 @@ export class Game {
    * Updates the players currency within the database.
    */
   async #updatePlayerCurrency() {
-    await this.#apolloClient.mutate({
+    ;(await this.#apolloClient.mutate({
       mutation: UpdateCurrencyDocument,
       variables: {
         currency: this.#currencyEarned,
       },
       refetchQueries: [{ query: MeDocument }],
-    }) as UpdateCurrencyMutationResult
+    })) as UpdateCurrencyMutationResult
   }
 
   /**
    * Updates the players xp within the database.
    */
   async #updatePlayerXp() {
-    await this.#apolloClient.mutate({
+    ;(await this.#apolloClient.mutate({
       mutation: UpdateExperienceDocument,
       variables: {
         experience: this.#xpEarned,
       },
       refetchQueries: [{ query: MeDocument }],
-    }) as UpdateExperienceMutationResult
+    })) as UpdateExperienceMutationResult
   }
 
   /**
@@ -546,13 +535,13 @@ export class Game {
    * Updates the leaderboard in the database.
    */
   async #updateLeaderboard() {
-    await this.#apolloClient.mutate({
+    ;(await this.#apolloClient.mutate({
       mutation: UpdateLeaderboardDocument,
       variables: {
         time: this.#timer.endTime,
       },
       refetchQueries: [{ query: LeaderboardDocument }],
-    }) as UpdateLeaderboardMutationResult
+    })) as UpdateLeaderboardMutationResult
   }
 
   /**
@@ -587,10 +576,7 @@ export class Game {
       return
     } else if (this.#gamestate === GAME_STATE.PAUSED) {
       return
-    } else if (
-      this.#gamestate === GAME_STATE.WON &&
-      this.#particles.length === 0
-    ) {
+    } else if (this.#gamestate === GAME_STATE.WON && this.#particles.length === 0) {
       this.#endGame()
       return
     }
@@ -604,8 +590,7 @@ export class Game {
       return
     }
 
-    this.#previousFrameTime =
-      this.#currentFrameTime - (timeDiffernce % this.#frameInterval)
+    this.#previousFrameTime = this.#currentFrameTime - (timeDiffernce % this.#frameInterval)
     this.#clearCanvas()
     this.#updateBackground()
     this.#updateParticles()

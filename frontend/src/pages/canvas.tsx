@@ -87,7 +87,12 @@ export const Canvas = (props: TGameCanvasProps) => {
 
   return (
     <div className='game-wrapper'>
-      <canvas ref={canvasRef} width='1024' height='576' key={'canvas'}></canvas>
+      <canvas
+        ref={canvasRef}
+        width='1024'
+        height='576'
+        key={'canvas'}
+      ></canvas>
       {gamestate === GAME_STATE.OVER ? (
         <GameOver
           tryAgain={handleTryAgain}
@@ -98,9 +103,9 @@ export const Canvas = (props: TGameCanvasProps) => {
         <></>
       )}
       {gamestate === GAME_STATE.PAUSED ? (
-        <Paused 
-          game={game!} 
-          handleResumeClick={handleResumeClick} 
+        <Paused
+          game={game!}
+          handleResumeClick={handleResumeClick}
           audioHandler={props.audiohandler}
         />
       ) : (

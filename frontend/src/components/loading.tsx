@@ -9,13 +9,15 @@ export const Loading = () => {
     const maxDots = 3
     let i = 1
 
-    setDotInterval(setInterval(() => {
-      if (i > maxDots) {
-        i = 1
-      }
-      setDots(dot.repeat(i))
-      i++
-    }, 500))
+    setDotInterval(
+      setInterval(() => {
+        if (i > maxDots) {
+          i = 1
+        }
+        setDots(dot.repeat(i))
+        i++
+      }, 500)
+    )
   }
 
   useEffect(() => {
@@ -32,7 +34,9 @@ export const Loading = () => {
     <div className='wrapper'>
       <div className='loading'>
         <h1>Loading{dots}</h1>
-        <img src='logo192.png' alt=''></img>
+        <img
+          src='logo192.png'
+          alt=''></img>
       </div>
     </div>
   )

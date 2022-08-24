@@ -24,17 +24,19 @@ export const Levels = (props: TLevelsProps) => {
     <div className='levels-wrapper'>
       <span>Levels</span>
       <MenuButton />
-      <Link 
-        to='/play' 
+      <Link
+        to='/play'
         onClick={(e) => e.preventDefault()}
         style={{ cursor: 'not-allowed' }}
-        className='level-mode'>
+        className='level-mode'
+      >
         Campaign
       </Link>
       <Link
         to='/play'
         className='level-mode'
-        onClick={() => handleLevelClick(LEVEL.ENDLESS)}>
+        onClick={() => handleLevelClick(LEVEL.ENDLESS)}
+      >
         Endless Mode
       </Link>
     </div>

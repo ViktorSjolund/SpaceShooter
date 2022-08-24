@@ -11,11 +11,7 @@ export class LevelEndless {
   #imageHandler
   #game
 
-  constructor(
-    game: Game,
-    baseDifficultyMultiplier: number,
-    imageHandler: ImageHandler
-  ) {
+  constructor(game: Game, baseDifficultyMultiplier: number, imageHandler: ImageHandler) {
     this.#game = game
     this.#levelUtil = new LevelUtil(game, baseDifficultyMultiplier)
     this.#imageHandler = imageHandler

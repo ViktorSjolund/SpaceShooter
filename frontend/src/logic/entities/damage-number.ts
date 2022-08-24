@@ -42,21 +42,13 @@ export class DamageNumber {
     }
 
     if (this.#didMiss) {
-      this.#canvasRef.ctx.fillText(
-        'Missed!',
-        this.#position.x,
-        this.#position.y
-      )
+      this.#canvasRef.ctx.fillText('Missed!', this.#position.x, this.#position.y)
     } else {
       let damageString = this.#damage.toFixed(0).toString()
       if (this.#damage >= 1000) {
         damageString = (this.#damage / 1000).toFixed(1) + 'K'
       }
-      this.#canvasRef.ctx.fillText(
-        damageString,
-        this.#position.x,
-        this.#position.y
-      )
+      this.#canvasRef.ctx.fillText(damageString, this.#position.x, this.#position.y)
     }
   }
 

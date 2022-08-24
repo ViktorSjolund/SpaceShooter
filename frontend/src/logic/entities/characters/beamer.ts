@@ -19,15 +19,7 @@ export class Beamer implements CharacterInterface {
   #enemies
   #damageNumbers: DamageNumber[]
 
-  constructor({
-    position,
-    images,
-    canvasRef,
-    size,
-    properties,
-    velocity,
-    enemies,
-  }: TBeamer) {
+  constructor({ position, images, canvasRef, size, properties, velocity, enemies }: TBeamer) {
     this.position = position
     this.#images = images
     this.#canvasRef = canvasRef

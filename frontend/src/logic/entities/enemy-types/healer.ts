@@ -57,10 +57,7 @@ export class Healer extends Enemy {
    * Adds hitpoints to the enemy the healer is attached to.
    */
   #healEnemy() {
-    if (
-      this.#enemy.hitpoints.current + this.#healAmount >
-      this.#enemy.hitpoints.default
-    ) {
+    if (this.#enemy.hitpoints.current + this.#healAmount > this.#enemy.hitpoints.default) {
       this.#enemy.hitpoints.current = this.#enemy.hitpoints.default
     } else {
       this.#enemy.hitpoints.current += this.#healAmount

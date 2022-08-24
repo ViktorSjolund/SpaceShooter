@@ -16,6 +16,5 @@ export class LevelOne {
   /**
    * Plays the level.
    */
-  play() {
-  }
+  play() {}
 }

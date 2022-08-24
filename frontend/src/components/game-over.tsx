@@ -10,18 +10,18 @@ export const GameOver = (props: TGameOverProps) => {
   return (
     <div className='game-over-wrapper'>
       <div className='game-over-text'>Game Over!</div>
-      <div> You earned 
+      <div>
         {' '}
-        <span style={{ color: 'green' }}>{props.currencyEarned}</span>
-        {' '}coin(s)
+        You earned <span style={{ color: 'green' }}>{props.currencyEarned}</span> coin(s)
       </div>
-      <Link to='/play' onClick={handleTryAgainClick}>
+      <Link
+        to='/play'
+        onClick={handleTryAgainClick}
+      >
         Try Again
       </Link>
-      <Link to='/'>
-        Main Menu
-      </Link>
-      <VolumeControl audioHandler={props.audioHandler}/>
+      <Link to='/'>Main Menu</Link>
+      <VolumeControl audioHandler={props.audioHandler} />
     </div>
   )
 }

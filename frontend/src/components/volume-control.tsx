@@ -44,7 +44,11 @@ export const VolumeControl = (props: TVolumeProps) => {
       ) : (
         <></>
       )}
-      <AiFillControl fill='white' size={40} onClick={toggleSlider} />
+      <AiFillControl
+        fill='white'
+        size={40}
+        onClick={toggleSlider}
+      />
     </div>
   )
 }

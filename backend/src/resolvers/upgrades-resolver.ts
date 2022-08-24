@@ -9,7 +9,7 @@ import { ApolloContextType } from '../types/context'
 export class UpgradesResolver {
   /**
    * Gets the user's unlocked upgrades for the given character.
-   * 
+   *
    * @param characterId The id of the character the user has selected.
    * @returns An array of the unlocked upgrades.
    */
@@ -30,7 +30,7 @@ export class UpgradesResolver {
 
   /**
    * Adds an upgrade to the user.
-   * 
+   *
    * @param upgradeId The id of the upgrade.
    * @param characterId The id of the character the user has selected.
    * @returns False if the user already has the upgrade.
@@ -50,7 +50,7 @@ export class UpgradesResolver {
     `)
 
     const upgrade = result[0] as Upgrades[]
-    
+
     if (upgrade.length > 0) {
       return false
     }

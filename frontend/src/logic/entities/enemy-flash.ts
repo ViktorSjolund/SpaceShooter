@@ -9,14 +9,7 @@ export class EnemyFlash extends Entity {
   #image
   #alpha
 
-  constructor({
-    position,
-    velocity,
-    size,
-    canvasRef,
-    enemy,
-    image,
-  }: TEnemyFlash) {
+  constructor({ position, velocity, size, canvasRef, enemy, image }: TEnemyFlash) {
     super({ position, velocity, size, canvasRef })
     this.#enemy = enemy
     this.#image = image

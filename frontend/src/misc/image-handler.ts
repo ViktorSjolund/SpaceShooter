@@ -4,7 +4,7 @@
 export class ImageHandler {
   /**
    * Loads and gets an image.
-   * 
+   *
    * @param src The relative path to the image.
    * @returns The image at the source.
    */

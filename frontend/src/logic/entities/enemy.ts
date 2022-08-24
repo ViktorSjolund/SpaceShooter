@@ -103,10 +103,7 @@ export class Enemy extends Entity implements EnemyInterface {
 
     if (this.position.x + this.velocity.x < 0 + this.size.width) {
       this.velocity.x = Math.abs(this.velocity.x)
-    } else if (
-      this.position.x + this.velocity.x >
-      this.canvasRef.canvas!.width - this.size.width
-    ) {
+    } else if (this.position.x + this.velocity.x > this.canvasRef.canvas!.width - this.size.width) {
       this.velocity.x = -this.velocity.x
     }
 

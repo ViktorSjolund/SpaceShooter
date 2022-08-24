@@ -43,13 +43,7 @@ export class Explosion extends Entity {
    */
   #draw() {
     this.canvasRef.ctx.beginPath()
-    this.canvasRef.ctx.arc(
-      this.position.x,
-      this.position.y,
-      this.#radii,
-      0,
-      2 * Math.PI
-    )
+    this.canvasRef.ctx.arc(this.position.x, this.position.y, this.#radii, 0, 2 * Math.PI)
     this.canvasRef.ctx.fillStyle = `rgba(255, 255, 255, ${this.#alpha})`
     this.canvasRef.ctx.fill()
   }

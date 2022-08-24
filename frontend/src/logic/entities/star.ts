@@ -21,12 +21,7 @@ export class Star extends Entity {
    */
   #draw() {
     this.canvasRef.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)'
-    this.canvasRef.ctx.fillRect(
-      this.position.x,
-      this.position.y,
-      this.size.width,
-      this.size.height
-    )
+    this.canvasRef.ctx.fillRect(this.position.x, this.position.y, this.size.width, this.size.height)
   }
 
   /**

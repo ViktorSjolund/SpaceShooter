@@ -51,15 +51,10 @@ export class Particle extends Entity {
     if (!this.#color.r && !this.#color.g && !this.#color.b) {
       this.#pickRandomColor()
     }
-    this.canvasRef.ctx.fillStyle = `rgba(${this.#color.r}, ${this.#color.g}, ${
-      this.#color.b
-    }, ${this.#alpha})`
-    this.canvasRef.ctx.fillRect(
-      this.position.x,
-      this.position.y,
-      this.size.width,
-      this.size.height
-    )
+    this.canvasRef.ctx.fillStyle = `rgba(${this.#color.r}, ${this.#color.g}, ${this.#color.b}, ${
+      this.#alpha
+    })`
+    this.canvasRef.ctx.fillRect(this.position.x, this.position.y, this.size.width, this.size.height)
   }
 
   /**

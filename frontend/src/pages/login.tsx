@@ -59,29 +59,30 @@ export const Login = (props: TLoginProps) => {
         <form onSubmit={handleSubmit}>
           <span>Login</span>
           <label>Username</label>
-          <input 
-            onChange={handleUsernameChange} 
-            style={{ borderColor: usernameErr ? 'red': ''}}
+          <input
+            onChange={handleUsernameChange}
+            style={{ borderColor: usernameErr ? 'red' : '' }}
           />
           <span className='form-error-text'>{usernameErr}</span>
           <label>Password</label>
-          <input 
-            onChange={handlePasswordChange} 
-            type='password' 
-            style={{ borderColor: passwordErr ? 'red': ''}}
+          <input
+            onChange={handlePasswordChange}
+            type='password'
+            style={{ borderColor: passwordErr ? 'red' : '' }}
           />
           <span className='form-error-text'>{passwordErr}</span>
           <Link to='/register'>
             <span>Create an account</span>
           </Link>
           <div className='form-submit'>
-          {isLoggingIn ? 
-            <AiOutlineLoading 
-              fill='black'
-              size={22}
-            /> :
-            <button type='submit'>Login</button>
-          }
+            {isLoggingIn ? (
+              <AiOutlineLoading
+                fill='black'
+                size={22}
+              />
+            ) : (
+              <button type='submit'>Login</button>
+            )}
           </div>
         </form>
       </div>

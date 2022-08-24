@@ -8,7 +8,10 @@ export const UpgradeButton = (props: TUpgradeButtonProps) => {
       onMouseLeave={props.handleHideUpgradeText}
       className={props.isUnlocked(props.upgrade.id) ? 'unlocked' : ''}
     >
-      <img src={props.upgrade.imgSrc} alt='' />
+      <img
+        src={props.upgrade.imgSrc}
+        alt=''
+      />
     </div>
   )
 }
