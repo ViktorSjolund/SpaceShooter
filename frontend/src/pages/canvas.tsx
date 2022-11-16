@@ -36,15 +36,7 @@ export const Canvas = (props: TGameCanvasProps) => {
   }
 
   const handleGameStateChange: TStateChangeCb = (state) => {
-    if (state === GAME_STATE.PLAYING) {
-      setGamestate(GAME_STATE.PLAYING)
-    } else if (state === GAME_STATE.PAUSED) {
-      setGamestate(GAME_STATE.PAUSED)
-    } else if (state === GAME_STATE.WON) {
-      setGamestate(GAME_STATE.WON)
-    } else if (state === GAME_STATE.OVER) {
-      setGamestate(GAME_STATE.OVER)
-    }
+    setGamestate(state)
   }
 
   const handleTryAgain = () => {

@@ -18,6 +18,7 @@ export class Enemy extends Entity implements EnemyInterface {
   #flash: EnemyFlash | null
   #xp
   #currency
+  #moveInterval
 
   constructor({
     position,
@@ -40,6 +41,7 @@ export class Enemy extends Entity implements EnemyInterface {
     this.#flash = null
     this.#xp = 30
     this.#currency = 20
+    this.#moveInterval = this.#getRandomMoveInterval()
   }
 
   get currency() {
@@ -75,6 +77,17 @@ export class Enemy extends Entity implements EnemyInterface {
   }
 
   /**
+   * Gets a random interval for when the enemy is going to move.
+   * 
+   * @returns the move interval.
+   */
+  #getRandomMoveInterval() {
+    const max = 100
+    const min = 50
+    return Math.floor(Math.random() * (max - min) + min)
+  }
+
+  /**
    * Draws the enemy.
    */
   #draw() {
@@ -95,9 +108,10 @@ export class Enemy extends Entity implements EnemyInterface {
     this.#draw()
     this.#numberOfUpdates++
 
-    if (this.#numberOfUpdates % 200 === 0) {
-      this.velocity.x = (Math.random() - 0.5) * 5
-    } else if (this.#numberOfUpdates % 100 === 0) {
+    if (this.#numberOfUpdates % this.#moveInterval === 0) {
+      this.velocity.x = (Math.random() - 0.5) * 8
+      this.#moveInterval = this.#getRandomMoveInterval()
+    } else if (this.#numberOfUpdates % this.#moveInterval === 0) {
       this.velocity.x = 0
     }
 
