@@ -27,7 +27,8 @@ export const Canvas = (props: TGameCanvasProps) => {
         },
         props.charpicker,
         props.client,
-        handleGameStateChange
+        handleGameStateChange,
+        props.audiohandler
       )
       newGame.play()
       setGame(newGame)

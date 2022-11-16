@@ -34,6 +34,16 @@ export class AudioHandler {
   }
 
   /**
+   * Plays an audio snippet of an enemy dying.
+   */
+  playKillSound() {
+    const killSound = new Audio('/sound/explosion2.mp3')
+    killSound.loop = false
+    killSound.volume = 0.5 * this.#volumeMultiplier
+    killSound.play()
+  }
+
+  /**
    * Plays the theme song.
    */
   playThemeSong() {

@@ -29,6 +29,7 @@ import { Timer } from './timer'
 import { ImageHandler } from '../misc/image-handler'
 import { CurrencyDisplay } from './currency-display'
 import { TStateChangeCb } from '../types/types'
+import { AudioHandler } from '@/misc/audio-handler'
 
 export class Game {
   #canvasRef
@@ -52,13 +53,15 @@ export class Game {
   #frameInterval
   #currencyDisplay
   #stateChangeCb
+  #audioHandler
 
   constructor(
     lvlPicker: LevelPicker,
     canvasRef: TCanvasRef,
     characterPicker: CharacterPicker,
     client: ApolloClient<NormalizedCacheObject>,
-    stateChangeCb: TStateChangeCb
+    stateChangeCb: TStateChangeCb,
+    audioHandler: AudioHandler
   ) {
     this.#canvasRef = canvasRef
     this.#apolloClient = client
@@ -80,6 +83,7 @@ export class Game {
     this.#fps = 60
     this.#frameInterval = 1000 / this.#fps
     this.#stateChangeCb = stateChangeCb
+    this.#audioHandler = audioHandler
   }
 
   get gamestate() {
@@ -433,7 +437,7 @@ export class Game {
    * @param enemy The enemy that was killed.
    */
   #enemyKilled(enemy: Enemy) {
-    this.#playKillSound()
+    this.#audioHandler.playKillSound()
     if (enemy.isWinCondition) {
       this.#gamestate = GAME_STATE.WON
     }
@@ -468,16 +472,6 @@ export class Game {
         }
       }
     })
-  }
-
-  /**
-   * Plays an audio snippet of an enemy dying.
-   */
-  #playKillSound() {
-    const killSound = new Audio('/sound/explosion2.mp3')
-    killSound.loop = false
-    killSound.volume = 0.5
-    killSound.play()
   }
 
   /**
