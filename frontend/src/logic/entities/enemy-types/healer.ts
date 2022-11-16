@@ -96,7 +96,9 @@ export class Healer extends Enemy {
     this.#updates++
     this.position.y += this.velocity.y
 
-    if (this.#updates % 200 === 0) {
+    const healDelay = 100
+
+    if (this.#updates % healDelay === 0) {
       this.#healEnemy()
     }
 

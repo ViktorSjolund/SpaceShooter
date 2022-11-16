@@ -139,7 +139,10 @@ export class Gigantor extends Boss {
     this.#updateCount++
     this.position.y += this.velocity.y
 
-    if (this.#updateCount % 500 === 0 && this.#updateCount > 3000) {
+    const healerSpawnInterval = 200
+    const healerSpawnDelay = 1000
+
+    if (this.#updateCount % healerSpawnInterval === 0 && this.#updateCount > healerSpawnDelay) {
       this.#spawnHealer()
     }
 
