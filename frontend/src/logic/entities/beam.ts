@@ -13,6 +13,10 @@ export class Beam extends Entity {
   #damageNumbers
   #images
   #attackRate
+  #alpha
+  #alphaAdder
+  #brightness
+  #brightnessAdder
 
   constructor({
     position,
@@ -32,26 +36,36 @@ export class Beam extends Entity {
     this.#damageNumbers = damageNumbers
     this.#images = images
     this.#attackRate = attackRate
+    this.#alpha = 1
+    this.#alphaAdder = -0.01
+    this.#brightness = 100
+    this.#brightnessAdder = 1
   }
 
   /**
    * Draws the beam.
    */
   #draw() {
-    this.canvasRef.ctx.drawImage(
+    const { ctx } = this.canvasRef
+
+    ctx.save()
+    ctx.filter = `brightness(${this.#brightness}%)`
+    ctx.globalAlpha = this.#alpha
+    ctx.drawImage(
       this.#images.beamImg,
       this.position.x + 4,
       this.position.y,
       this.size.width,
       this.size.height
     )
-    this.canvasRef.ctx.drawImage(
+    ctx.drawImage(
       this.#images.beamStartImg,
       this.position.x - 9,
       this.size.height - 47,
       this.size.width + 20,
       50
     )
+    ctx.restore()
   }
 
   /**
@@ -63,6 +77,20 @@ export class Beam extends Entity {
   update(posX: number, enemies: Enemy[]) {
     this.#draw()
     this.position.x = posX
+
+    if (this.#alpha < 0.7) {
+      this.#alphaAdder = 0.01
+    } else if (this.#alpha > 1) {
+      this.#alphaAdder = -0.01
+    }
+    this.#alpha += this.#alphaAdder
+
+    if (this.#brightness > 170) {
+      this.#brightnessAdder = -1
+    } else if (this.#brightness < 100) {
+      this.#brightnessAdder = 1
+    }
+    this.#brightness += this.#brightnessAdder
 
     const dmgInterval = 30 / this.#attackRate
 
