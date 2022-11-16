@@ -34,12 +34,12 @@ export class UpgradesHandler {
   /**
    * Checks if the player can purchase an upgrade.
    *
-   * @param upgrade The upgrade that is to be checked.
+   * @param upgradeId The upgrade id that is to be checked.
    * @param lvlHandler The player level handler.
    * @returns An object containing information about the purchase success.
    */
-  async #canPurchaseUpgrade(
-    upgrade: TUpgrade,
+  async canPurchaseUpgrade(
+    upgradeId: number,
     lvlHandler: PlayerLevelHandler
   ): Promise<TCouldPurchaseResponse> {
     const result = (await this.#apolloClient.query({
@@ -51,6 +51,20 @@ export class UpgradesHandler {
         error: {
           message: 'Something went wrong...',
         },
+      }
+    }
+
+    let upgrade: TUpgrade | null = null
+
+    for (const [, u] of this.#upgrades.entries()) {
+      if (u.id === upgradeId) {
+        upgrade = u
+      }
+    }
+
+    if (!upgrade) {
+      return {
+        success: false
       }
     }
 
@@ -82,11 +96,22 @@ export class UpgradesHandler {
    * Adds an upgrade to the database.
    *
    * @param upgradeId The id of the upgrade.
-   * @param cost The cost of the upgrade.
    * @param characterId The character id the upgrade applies to.
    * @returns False if the upgrade could not be added to the database.
    */
-  async #addUpgradeToDb(upgradeId: number, cost: number, characterId: CHARACTER): Promise<Boolean> {
+  async #addUpgradeToDb(upgradeId: number, characterId: CHARACTER): Promise<Boolean> {
+    let upgrade: TUpgrade | null = null
+
+    for (const [, u] of this.#upgrades.entries()) {
+      if (u.id === upgradeId) {
+        upgrade = u
+      }
+    }
+
+    if (!upgrade) {
+      return false
+    }
+
     const result = (await this.#apolloClient.mutate({
       mutation: AddUpgradeDocument,
       variables: {
@@ -114,7 +139,7 @@ export class UpgradesHandler {
       ;(await this.#apolloClient.mutate({
         mutation: UpdateCurrencyDocument,
         variables: {
-          currency: -cost,
+          currency: -upgrade.cost,
         },
         refetchQueries: [
           {
@@ -173,19 +198,10 @@ export class UpgradesHandler {
       }
     }
 
-    for (const [, upgrade] of this.#upgrades.entries()) {
-      if (upgrade.id === upgradeId) {
-        const response = await this.#canPurchaseUpgrade(upgrade, lvlHandler)
-        if (response.success) {
-          this.#addUpgradeToDb(upgrade.id, upgrade.cost, characterId)
-        }
-
-        return response
-      }
-    }
+    this.#addUpgradeToDb(upgradeId, characterId)
 
     return {
-      success: true,
+      success: true
     }
   }
 }

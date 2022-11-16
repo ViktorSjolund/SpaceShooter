@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { UpgradesHandler } from '../logic/upgrade-logic/upgrades-handler'
 import { UPGRADE_ID } from '../logic/util/enums'
 import { TUpgradeMenuProps, TUpgrade } from '../types/types'
@@ -9,11 +9,17 @@ import { Loading } from '../components/loading'
 import { Navigate } from 'react-router-dom'
 import { UpgradeButton } from '../components/upgrade-button'
 
+type TUpgradeStatus = {
+  upgradeId: number
+  unlocked: boolean
+}
+
 export const UpgradeMenu = (props: TUpgradeMenuProps) => {
   const [descText, setDescText] = useState('')
   const [costText, setCostText] = useState('')
   const [reqText, setReqText] = useState('')
   const [upgradeText, setUpgradeText] = useState('')
+  const [upgradesStatus, setUpgradesStatus] = useState<TUpgradeStatus[]>([])
   const [showUpgradeText, setShowUpgradeText] = useState(false)
   const [showTooltip, setShowTooltip] = useState(false)
   const { loading: meLoading, data: meData } = useMeQuery()
@@ -22,10 +28,52 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
       characterId: props.charpicker.chosenCharacter,
     },
   })
-  const upgradesObj = new UpgradesHandler(props.client)
+  const upgradesHandler = new UpgradesHandler(props.client)
+
+  useEffect(() => {
+    if (upgradesData) {
+      const upgradesStat = [...upgradesStatus]
+      upgradesData.upgrades.forEach(u => {
+        upgradesStat.forEach(ustatus => {
+          if (ustatus.upgradeId === u.upgrade_id) {
+            ustatus.unlocked = true
+          }
+        })
+      })
+      setUpgradesStatus(() => [...upgradesStat])
+    }
+    if (upgradesStatus.length === 0) {
+      const upgrades: TUpgradeStatus[] = []
+      upgradesHandler.upgrades.forEach(u => {
+        upgrades.push({ upgradeId: u.id, unlocked: false })
+      })
+      setUpgradesStatus([...upgrades])
+    }
+  }, [upgradesData, upgradesStatus, upgradesHandler.upgrades])
 
   const handleNewUpgrade = async (upgradeId: UPGRADE_ID) => {
-    const response = await upgradesObj.purchaseUpgrade(
+    const result = await upgradesHandler.canPurchaseUpgrade(
+      upgradeId,
+      props.lvlhandler
+    )
+    if (result.success) {
+      const upgrades = [...upgradesStatus]
+      upgrades.forEach(upgrade => {
+        if (upgrade.upgradeId === upgradeId) {
+          upgrade.unlocked = true
+        }
+      })
+      setUpgradesStatus([...upgrades])
+    } else {
+      setUpgradeText(result.error?.message || '')
+      setShowUpgradeText(true)
+      setTimeout(() => {
+        setShowUpgradeText(false)
+      }, 2000)
+      return
+    }
+
+    const response = await upgradesHandler.purchaseUpgrade(
       upgradeId,
       props.charpicker.chosenCharacter,
       props.lvlhandler
@@ -59,8 +107,8 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
   const isUnlocked = (upgradeId: UPGRADE_ID) => {
     let upgradeIsUnlocked = false
 
-    upgradesData?.upgrades.forEach((upgrade) => {
-      if (upgrade.upgrade_id === upgradeId) {
+    upgradesStatus.forEach((upgrade) => {
+      if (upgrade.upgradeId === upgradeId && upgrade.unlocked) {
         upgradeIsUnlocked = true
       }
     })
@@ -82,7 +130,7 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
   const upgradeButtonsLvl10to29: JSX.Element[] = []
   const upgradeButtonsLvl30to59: JSX.Element[] = []
 
-  upgradesObj.upgrades
+  upgradesHandler.upgrades
     .sort((a, b) => a.requirement - b.requirement)
     .forEach((upgrade) => {
       if (upgrade.characters.includes(props.charpicker.chosenCharacter)) {
