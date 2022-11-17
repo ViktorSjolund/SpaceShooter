@@ -29,7 +29,7 @@ export const Characters = (props: TCharactersProps) => {
       <UserInfo lvlhandler={props.lvlhandler} />
       <div className='characters-wrapper'>
         <span>Characters</span>
-        <MenuButton />
+        <MenuButton audioHandler={props.audioHandler}/>
         <div>
           <span> Default </span>
           <span>

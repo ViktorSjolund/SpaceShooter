@@ -4,15 +4,13 @@ import { Loading } from '../components/loading'
 import { MenuButton } from '../components/menu-button'
 import { useMeQuery } from '../generated/graphql'
 import { LEVEL } from '../logic/util/enums'
-import { AudioHandler } from '../misc/audio-handler'
 
 export const Levels = (props: TLevelsProps) => {
   const { loading, data } = useMeQuery()
-  const audioHandler = new AudioHandler()
 
   const handleLevelClick = (levelid: LEVEL) => {
     props.lvlpicker.currentLevel = levelid
-    audioHandler.playClickSound()
+    props.audioHandler.playClickSound()
   }
 
   if (loading) return <Loading />
@@ -23,7 +21,7 @@ export const Levels = (props: TLevelsProps) => {
   return (
     <div className='levels-wrapper'>
       <span>Levels</span>
-      <MenuButton />
+      <MenuButton audioHandler={props.audioHandler}/>
       <Link
         to='/play'
         onClick={(e) => e.preventDefault()}

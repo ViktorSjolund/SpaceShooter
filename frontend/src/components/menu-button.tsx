@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom'
 import { AudioHandler } from '../misc/audio-handler'
 
-export const MenuButton = () => {
-  const audioHandler = new AudioHandler()
+type TMenuButtonProps = {
+  audioHandler: AudioHandler
+}
+
+export const MenuButton = (props: TMenuButtonProps) => {
   return (
     <Link
-      onClick={() => audioHandler.playClickSound()}
+      onClick={() => props.audioHandler.playClickSound()}
       to='/'
       className='menu-button'
     >

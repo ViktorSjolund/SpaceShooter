@@ -187,7 +187,7 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
         <></>
       )}
       <UserInfo lvlhandler={props.lvlhandler} />
-      <MenuButton />
+      <MenuButton audioHandler={props.audiohandler}/>
     </div>
   )
 }
