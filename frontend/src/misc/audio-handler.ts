@@ -4,12 +4,16 @@
 export class AudioHandler {
   #volume
   #volumeMultiplier
+  #musicVolumeMultiplier
   #themeSong: HTMLAudioElement | null
+  #musicVolume
 
   constructor() {
     this.#themeSong = null
-    this.#volumeMultiplier = 0
-    this.#volume = 0
+    this.#volumeMultiplier = 0.5
+    this.#musicVolumeMultiplier = 0
+    this.#volume = 50
+    this.#musicVolume = 0
   }
 
   get volume() {
@@ -20,8 +24,20 @@ export class AudioHandler {
     this.#volume = value
   }
 
+  get musicVolume() {
+    return this.#musicVolume
+  }
+
+  set musicVolume(value: number) {
+    this.#musicVolume = value
+  }
+
   set volumeMultiplier(value: number) {
     this.#volumeMultiplier = value
+  }
+
+  set musicVolumeMultiplier(value: number) {
+    this.#musicVolumeMultiplier = value
   }
 
   /**
@@ -54,6 +70,8 @@ export class AudioHandler {
   }
 
   refreshThemeVolume() {
-    this.#themeSong!.volume = 0.02 * this.#volumeMultiplier
+    if (this.#themeSong) {
+      this.#themeSong.volume = 0.02 * this.#volumeMultiplier * this.#musicVolumeMultiplier
+    }
   }
 }

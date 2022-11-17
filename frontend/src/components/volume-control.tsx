@@ -1,16 +1,27 @@
 import { TVolumeProps } from '@/types/types'
 import { useState } from 'react'
 import { AiFillControl } from 'react-icons/ai'
+import { IoMdMusicalNotes } from 'react-icons/io'
+import { BsVolumeUpFill } from 'react-icons/bs'
 
 export const VolumeControl = (props: TVolumeProps) => {
   const [volume, setVolume] = useState(props.audioHandler.volume)
-  const [showSlider, setShowSlider] = useState(false)
+  const [musicVolume, setMusicVolume] = useState(props.audioHandler.musicVolume)
+  const [showSlider, setShowSlider] = useState(true)
 
   const handleVolumeSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseInt(e.target.value)
     setVolume(newVolume)
     props.audioHandler.volumeMultiplier = newVolume / 100
     props.audioHandler.volume = newVolume
+    props.audioHandler.refreshThemeVolume()
+  }
+
+  const handleMusicVolumeSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseInt(e.target.value)
+    setMusicVolume(newVolume)
+    props.audioHandler.musicVolumeMultiplier = newVolume / 100
+    props.audioHandler.musicVolume = newVolume
     props.audioHandler.refreshThemeVolume()
   }
 
@@ -22,25 +33,38 @@ export const VolumeControl = (props: TVolumeProps) => {
   return (
     <div
       className='volume-controller'
-      style={
-        showSlider
-          ? {
-              backgroundColor: 'rgba(20, 20, 20, 0.5)',
-              border: '0.5px solid white',
-            }
-          : {}
-      }
     >
       {showSlider ? (
-        <input
-          type='range'
-          min='0'
-          max='100'
-          value={volume}
-          onChange={handleVolumeSlider}
-          style={{ transform: 'rotate(-90deg)' }}
-          step='10'
-        />
+        <div className='volume-controller-menu'>
+          <div>
+            <IoMdMusicalNotes
+              fill='white'
+              size={30}
+            />
+            <input
+              type='range'
+              min='0'
+              max='100'
+              value={musicVolume}
+              onChange={handleMusicVolumeSlider}
+              step='10'
+            />
+          </div>
+          <div>
+            <BsVolumeUpFill
+              fill='white'
+              size={30}
+            />
+            <input
+              type='range'
+              min='0'
+              max='100'
+              value={volume}
+              onChange={handleVolumeSlider}
+              step='10'
+            />
+          </div>
+        </div>
       ) : (
         <></>
       )}
