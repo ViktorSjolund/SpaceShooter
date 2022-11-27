@@ -61,4 +61,23 @@ export class UpgradesResolver {
     `)
     return true
   }
+
+  /**
+   * Removes all upgrades from the user on the given character.
+   *
+   * @param characterId The id of the character the user has selected.
+   * @returns True if all upgrades were removed.
+   */
+  @Mutation(() => Boolean)
+  async removeAllUpgrades(
+    @Arg('character_id', () => Int) characterId: number,
+    @Ctx() { connection, req }: ApolloContextType
+  ): Promise<boolean> {
+    await connection.query(`
+      DELETE FROM upgrades
+      WHERE (user_id = ${req.session.userId} 
+      AND character_id = ${characterId})
+    `)
+    return true
+  }
 }
