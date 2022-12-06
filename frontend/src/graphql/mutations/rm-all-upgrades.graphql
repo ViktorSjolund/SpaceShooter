@@ -1,0 +1,3 @@
+mutation RemoveAllUpgrades($characterId: Int!) {
+  removeAllUpgrades(character_id: $characterId)
+}

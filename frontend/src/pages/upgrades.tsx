@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react'
 import { UpgradesHandler } from '../logic/upgrade-logic/upgrades-handler'
 import { UPGRADE_ID } from '../logic/util/enums'
 import { TUpgradeMenuProps, TUpgrade } from '../types/types'
-import { useMeQuery, useUpgradesQuery } from '../generated/graphql'
+import { UpgradesDocument, useMeQuery, useRemoveAllUpgradesMutation, useUpgradesQuery } from '../generated/graphql'
 import { MenuButton } from '../components/menu-button'
 import { UserInfo } from '../components/user-info'
 import { Loading } from '../components/loading'
 import { Navigate } from 'react-router-dom'
 import { UpgradeButton } from '../components/upgrade-button'
+import { GrPowerReset } from 'react-icons/gr'
 
 type TUpgradeStatus = {
   upgradeId: number
@@ -22,19 +23,20 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
   const [upgradesStatus, setUpgradesStatus] = useState<TUpgradeStatus[]>([])
   const [showUpgradeText, setShowUpgradeText] = useState(false)
   const [showTooltip, setShowTooltip] = useState(false)
+  const [showResetText, setShowResetText] = useState(false)
   const { loading: meLoading, data: meData } = useMeQuery()
   const { loading: upgradesLoading, data: upgradesData } = useUpgradesQuery({
     variables: {
-      characterId: props.charpicker.chosenCharacter,
-    },
+      characterId: props.charpicker.chosenCharacter
+    }
   })
-  const upgradesHandler = new UpgradesHandler(props.client)
+  const [removeAllUpgradesMutation] = useRemoveAllUpgradesMutation()
 
   useEffect(() => {
     if (upgradesData) {
       const upgradesStat = [...upgradesStatus]
-      upgradesData.upgrades.forEach(u => {
-        upgradesStat.forEach(ustatus => {
+      upgradesData.upgrades.forEach((u) => {
+        upgradesStat.forEach((ustatus) => {
           if (ustatus.upgradeId === u.upgrade_id) {
             ustatus.unlocked = true
           }
@@ -44,21 +46,18 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
     }
     if (upgradesStatus.length === 0) {
       const upgrades: TUpgradeStatus[] = []
-      upgradesHandler.upgrades.forEach(u => {
+      props.upgradesHandler.upgrades.forEach((u) => {
         upgrades.push({ upgradeId: u.id, unlocked: false })
       })
       setUpgradesStatus([...upgrades])
     }
-  }, [upgradesData, upgradesStatus, upgradesHandler.upgrades])
+  }, [upgradesData, upgradesStatus, props.upgradesHandler.upgrades])
 
   const handleNewUpgrade = async (upgradeId: UPGRADE_ID) => {
-    const result = await upgradesHandler.canPurchaseUpgrade(
-      upgradeId,
-      props.lvlhandler
-    )
+    const result = await props.upgradesHandler.canPurchaseUpgrade(upgradeId, props.lvlhandler)
     if (result.success) {
       const upgrades = [...upgradesStatus]
-      upgrades.forEach(upgrade => {
+      upgrades.forEach((upgrade) => {
         if (upgrade.upgradeId === upgradeId) {
           upgrade.unlocked = true
         }
@@ -73,7 +72,7 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
       return
     }
 
-    const response = await upgradesHandler.purchaseUpgrade(
+    const response = await props.upgradesHandler.purchaseUpgrade(
       upgradeId,
       props.charpicker.chosenCharacter,
       props.lvlhandler
@@ -95,13 +94,12 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
       setDescText(`Description: ${currentUpgrade.description}`)
       setCostText('Cost: Already unlocked')
       setShowTooltip(true)
-      return
+    } else {
+      setReqText(`Requirement: lvl ${currentUpgrade.requirement}`)
+      setDescText(`Description: ${currentUpgrade.description}`)
+      setCostText(`Cost: ${currentUpgrade.cost}`)
+      setShowTooltip(true)
     }
-
-    setReqText(`Requirement: lvl ${currentUpgrade.requirement}`)
-    setDescText(`Description: ${currentUpgrade.description}`)
-    setCostText(`Cost: ${currentUpgrade.cost}`)
-    setShowTooltip(true)
   }
 
   const isUnlocked = (upgradeId: UPGRADE_ID) => {
@@ -120,6 +118,10 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
     setShowTooltip(false)
   }
 
+  const handleResetUpgrades = async () => {
+    await props.upgradesHandler.removeAllUpgrades(props.charpicker.chosenCharacter)
+  }
+
   if (meLoading) return <Loading />
   if (!meData?.me.user?.id) {
     return <Navigate to='/login' />
@@ -130,7 +132,7 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
   const upgradeButtonsLvl10to29: JSX.Element[] = []
   const upgradeButtonsLvl30to59: JSX.Element[] = []
 
-  upgradesHandler.upgrades
+  props.upgradesHandler.upgrades
     .sort((a, b) => a.requirement - b.requirement)
     .forEach((upgrade) => {
       if (upgrade.characters.includes(props.charpicker.chosenCharacter)) {
@@ -186,8 +188,23 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
       ) : (
         <></>
       )}
+      {showResetText && (
+        <div className='upgrade-cost-tooltip'>
+          <span>!--------------------!</span>
+          <span>! Resets all upgrades. !</span>
+          <span>!--------------------!</span>
+        </div>
+      )}
+      <button
+        className='reset-upgrades'
+        onMouseOver={() => setShowResetText(true)}
+        onMouseLeave={() => setShowResetText(false)}
+        onClick={handleResetUpgrades}
+      >
+        <GrPowerReset size={25} />
+      </button>
       <UserInfo lvlhandler={props.lvlhandler} />
-      <MenuButton audioHandler={props.audiohandler}/>
+      <MenuButton audioHandler={props.audiohandler} />
     </div>
   )
 }

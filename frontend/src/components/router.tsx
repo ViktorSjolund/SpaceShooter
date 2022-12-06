@@ -12,12 +12,14 @@ import { AudioHandler } from '../misc/audio-handler'
 import { PlayerLevelHandler } from '../logic/player-level-handler'
 import { TAppRouterProps } from '../types/types'
 import { Leaderboard } from '../pages/leaderboard'
+import { UpgradesHandler } from '../logic/upgrade-logic/upgrades-handler'
 
 export const AppRouter = (props: TAppRouterProps) => {
   const levelPicker = new LevelPicker()
   const characterPicker = new CharacterPicker()
   const audioHandler = new AudioHandler()
   const playerLevelHandler = new PlayerLevelHandler()
+  const upgradesHandler = new UpgradesHandler(props.client)
   audioHandler.playThemeSong()
 
   window.addEventListener('click', (e: MouseEvent) => {
@@ -54,10 +56,10 @@ export const AppRouter = (props: TAppRouterProps) => {
           path='/upgrades'
           element={
             <UpgradeMenu
-              client={props.client}
               lvlhandler={playerLevelHandler}
               charpicker={characterPicker}
               audiohandler={audioHandler}
+              upgradesHandler={upgradesHandler}
             />
           }
         />

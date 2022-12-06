@@ -153,7 +153,7 @@ body {
 .upgrade-cost-tooltip {
   position: absolute;
   bottom: 28px;
-  left: 200px;
+  left: 250px;
   font-size: 25px;
   display: flex;
   flex-direction: column;
@@ -697,4 +697,15 @@ canvas {
   text-transform: capitalize;
   font-size: 20px !important;
   margin-top: 5px;
+}
+
+.reset-upgrades {
+  position: absolute;
+  bottom: 50px;
+  left: 170px;
+  cursor: pointer;
+  padding: 9px;
+  background-color: white;
+  border: 1px solid black;
+  display: flex;
 }

@@ -6,10 +6,11 @@ import {
   AddUpgradeMutationResult,
   MeDocument,
   MeQueryResult,
+  RemoveAllUpgradesDocument,
   UpdateCurrencyDocument,
   UpdateCurrencyMutationResult,
   UpgradesDocument,
-  UpgradesQueryResult,
+  UpgradesQueryResult
 } from '../../generated/graphql'
 import { CHARACTER, UPGRADE_ID } from '../util/enums'
 import { upgrades } from './upgrades'
@@ -43,14 +44,14 @@ export class UpgradesHandler {
     lvlHandler: PlayerLevelHandler
   ): Promise<TCouldPurchaseResponse> {
     const result = (await this.#apolloClient.query({
-      query: MeDocument,
+      query: MeDocument
     })) as MeQueryResult
 
     if (result.error || !result.data?.me.user) {
       return {
         error: {
-          message: 'Something went wrong...',
-        },
+          message: 'Something went wrong...'
+        }
       }
     }
 
@@ -76,18 +77,18 @@ export class UpgradesHandler {
     if (upgrade.cost > currency) {
       return {
         error: {
-          message: 'Insufficient funds.',
-        },
+          message: 'Insufficient funds.'
+        }
       }
     } else if (upgrade.requirement > playerLvl) {
       return {
         error: {
-          message: 'Lvl requirement was not met.',
-        },
+          message: 'Lvl requirement was not met.'
+        }
       }
     } else {
       return {
-        success: true,
+        success: true
       }
     }
   }
@@ -116,19 +117,19 @@ export class UpgradesHandler {
       mutation: AddUpgradeDocument,
       variables: {
         characterId,
-        upgradeId,
+        upgradeId
       },
       refetchQueries: [
         {
           query: UpgradesDocument,
           variables: {
-            characterId,
-          },
+            characterId
+          }
         },
         {
-          query: MeDocument,
-        },
-      ],
+          query: MeDocument
+        }
+      ]
     })) as AddUpgradeMutationResult
 
     if (result.error) {
@@ -139,19 +140,19 @@ export class UpgradesHandler {
       ;(await this.#apolloClient.mutate({
         mutation: UpdateCurrencyDocument,
         variables: {
-          currency: -upgrade.cost,
+          currency: -upgrade.cost
         },
         refetchQueries: [
           {
             query: UpgradesDocument,
             variables: {
-              characterId,
-            },
+              characterId
+            }
           },
           {
-            query: MeDocument,
-          },
-        ],
+            query: MeDocument
+          }
+        ]
       })) as UpdateCurrencyMutationResult
     }
 
@@ -174,15 +175,15 @@ export class UpgradesHandler {
     const result = (await this.#apolloClient.query({
       query: UpgradesDocument,
       variables: {
-        characterId,
-      },
+        characterId
+      }
     })) as UpgradesQueryResult
 
     if (result.error || !result.data?.upgrades) {
       return {
         error: {
-          message: 'Something went wrong...',
-        },
+          message: 'Something went wrong...'
+        }
       }
     }
 
@@ -192,8 +193,8 @@ export class UpgradesHandler {
       if (resultUpgrade[i].upgrade_id === upgradeId) {
         return {
           error: {
-            message: 'Upgrade already bought.',
-          },
+            message: 'Upgrade already bought.'
+          }
         }
       }
     }
@@ -203,5 +204,22 @@ export class UpgradesHandler {
     return {
       success: true
     }
+  }
+
+  async removeAllUpgrades(characterId: CHARACTER) {
+    await this.#apolloClient.mutate({
+      mutation: RemoveAllUpgradesDocument,
+      variables: {
+        characterId
+      },
+      refetchQueries: [
+        {
+          query: UpgradesDocument,
+          variables: {
+            characterId
+          }
+        }
+      ]
+    })
   }
 }

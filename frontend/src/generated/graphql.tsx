@@ -33,6 +33,7 @@ export type Mutation = {
   addUpgrade: Scalars['Boolean'];
   logout: Scalars['Boolean'];
   register: RegisterResponse;
+  removeAllUpgrades: Scalars['Boolean'];
   updateCurrency: Scalars['Boolean'];
   updateExperience: Scalars['Boolean'];
   updateLeaderboard: Scalars['Boolean'];
@@ -48,6 +49,11 @@ export type MutationAddUpgradeArgs = {
 export type MutationRegisterArgs = {
   password: Scalars['String'];
   username: Scalars['String'];
+};
+
+
+export type MutationRemoveAllUpgradesArgs = {
+  character_id: Scalars['Int'];
 };
 
 
@@ -135,6 +141,13 @@ export type RegisterMutationVariables = Exact<{
 
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'RegisterResponse', success?: boolean | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type RemoveAllUpgradesMutationVariables = Exact<{
+  characterId: Scalars['Int'];
+}>;
+
+
+export type RemoveAllUpgradesMutation = { __typename?: 'Mutation', removeAllUpgrades: boolean };
 
 export type UpdateCurrencyMutationVariables = Exact<{
   currency: Scalars['Int'];
@@ -283,6 +296,37 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const RemoveAllUpgradesDocument = gql`
+    mutation RemoveAllUpgrades($characterId: Int!) {
+  removeAllUpgrades(character_id: $characterId)
+}
+    `;
+export type RemoveAllUpgradesMutationFn = Apollo.MutationFunction<RemoveAllUpgradesMutation, RemoveAllUpgradesMutationVariables>;
+
+/**
+ * __useRemoveAllUpgradesMutation__
+ *
+ * To run a mutation, you first call `useRemoveAllUpgradesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveAllUpgradesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeAllUpgradesMutation, { data, loading, error }] = useRemoveAllUpgradesMutation({
+ *   variables: {
+ *      characterId: // value for 'characterId'
+ *   },
+ * });
+ */
+export function useRemoveAllUpgradesMutation(baseOptions?: Apollo.MutationHookOptions<RemoveAllUpgradesMutation, RemoveAllUpgradesMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveAllUpgradesMutation, RemoveAllUpgradesMutationVariables>(RemoveAllUpgradesDocument, options);
+      }
+export type RemoveAllUpgradesMutationHookResult = ReturnType<typeof useRemoveAllUpgradesMutation>;
+export type RemoveAllUpgradesMutationResult = Apollo.MutationResult<RemoveAllUpgradesMutation>;
+export type RemoveAllUpgradesMutationOptions = Apollo.BaseMutationOptions<RemoveAllUpgradesMutation, RemoveAllUpgradesMutationVariables>;
 export const UpdateCurrencyDocument = gql`
     mutation UpdateCurrency($currency: Int!) {
   updateCurrency(currency: $currency)

@@ -10,6 +10,7 @@ import { LevelPicker } from '../logic/level-picker'
 import { PlayerLevelHandler } from '../logic/player-level-handler'
 import { CHARACTER, GAME_STATE } from '../logic/util/enums'
 import { AudioHandler } from '../misc/audio-handler'
+import { UpgradesHandler } from '@/logic/upgrade-logic/upgrades-handler'
 
 export type TUpgrade = {
   id: number
@@ -63,7 +64,7 @@ export type TGameCanvasStates = {
 }
 
 export type TUpgradeMenuProps = {
-  client: ApolloClient<NormalizedCacheObject>
+  upgradesHandler: UpgradesHandler
   lvlhandler: PlayerLevelHandler
   charpicker: CharacterPicker
   audiohandler: AudioHandler
