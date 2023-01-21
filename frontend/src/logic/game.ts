@@ -267,31 +267,41 @@ export class Game {
       return
     }
 
-    result.data.upgrades.forEach((dbUpgrade) => {
-      this.#upgrades.upgrades.forEach((defaultUpgrade) => {
+    for (const dbUpgrade of result.data.upgrades) {
+      for (const defaultUpgrade of this.#upgrades.upgrades) {
         if (dbUpgrade.upgrade_id === defaultUpgrade.id) {
-          if (defaultUpgrade.id === UpgradeType.AddProjectile) {
-            this.#player.properties.numberOfProjectiles += 1
-          } else if (defaultUpgrade.id === UpgradeType.DuplicateProjectiles) {
-            this.#player.properties.numberOfProjectiles *= 2
-          } else if (defaultUpgrade.id === UpgradeType.AddPierce) {
-            this.#player.properties.pierceAmount += 1
-          } else if (defaultUpgrade.id === UpgradeType.AddDamageTen) {
-            this.#player.properties.damage *= 1.1
-          } else if (defaultUpgrade.id === UpgradeType.AddDamageTwenty) {
-            this.#player.properties.damage *= 1.2
-          } else if (defaultUpgrade.id === UpgradeType.AddDamageThirty) {
-            this.#player.properties.damage *= 1.3
-          } else if (defaultUpgrade.id === UpgradeType.AddAttackRateTen) {
-            this.#player.properties.attackRate /= 1.1
-          } else if (defaultUpgrade.id === UpgradeType.AddAttackRateTwenty) {
-            this.#player.properties.attackRate /= 1.2
-          } else if (defaultUpgrade.id === UpgradeType.AddAttackRateThirty) {
-            this.#player.properties.attackRate /= 1.3
+          switch (defaultUpgrade.id) {
+            case UpgradeType.AddProjectile:
+              this.#player.properties.numberOfProjectiles += 1
+              break
+            case UpgradeType.DuplicateProjectiles:
+              this.#player.properties.numberOfProjectiles *= 2
+              break
+            case UpgradeType.AddPierce:
+              this.#player.properties.pierceAmount += 1
+              break
+            case UpgradeType.AddDamageTen:
+              this.#player.properties.damage *= 1.1
+              break
+            case UpgradeType.AddDamageTwenty:
+              this.#player.properties.damage *= 1.2
+              break
+            case UpgradeType.AddDamageThirty:
+              this.#player.properties.damage *= 1.3
+              break
+            case UpgradeType.AddAttackRateTen:
+              this.#player.properties.attackRate /= 1.1
+              break
+            case UpgradeType.AddAttackRateTwenty:
+              this.#player.properties.attackRate /= 1.2
+              break
+            case UpgradeType.AddAttackRateThirty:
+              this.#player.properties.attackRate /= 1.3
+              break
           }
         }
-      })
-    })
+      }
+    }
   }
 
   /**
@@ -309,25 +319,32 @@ export class Game {
       return
     }
 
-    result.data.upgrades.forEach((dbUpgrade) => {
-      this.#upgrades.upgrades.forEach((defaultUpgrade) => {
+    for (const dbUpgrade of result.data.upgrades) {
+      for (const defaultUpgrade of this.#upgrades.upgrades) {
         if (dbUpgrade.upgrade_id === defaultUpgrade.id) {
-          if (defaultUpgrade.id === UpgradeType.AddDamageTen) {
-            this.#player.properties.damage *= 1.1
-          } else if (defaultUpgrade.id === UpgradeType.AddDamageTwenty) {
-            this.#player.properties.damage *= 1.2
-          } else if (defaultUpgrade.id === UpgradeType.AddDamageThirty) {
-            this.#player.properties.damage *= 1.3
-          } else if (defaultUpgrade.id === UpgradeType.AddAttackRateTen) {
-            this.#player.properties.attackRate /= 1.1
-          } else if (defaultUpgrade.id === UpgradeType.AddAttackRateTwenty) {
-            this.#player.properties.attackRate /= 1.2
-          } else if (defaultUpgrade.id === UpgradeType.AddAttackRateThirty) {
-            this.#player.properties.attackRate /= 1.3
+          switch (defaultUpgrade.id) {
+            case UpgradeType.AddDamageTen:
+              this.#player.properties.damage *= 1.1
+              break
+            case UpgradeType.AddDamageTwenty:
+              this.#player.properties.damage *= 1.2
+              break
+            case UpgradeType.AddDamageThirty:
+              this.#player.properties.damage *= 1.3
+              break
+            case UpgradeType.AddAttackRateTen:
+              this.#player.properties.attackRate /= 1.1
+              break
+            case UpgradeType.AddAttackRateTwenty:
+              this.#player.properties.attackRate /= 1.2
+              break
+            case UpgradeType.AddAttackRateThirty:
+              this.#player.properties.attackRate /= 1.3
+              break
           }
         }
-      })
-    })
+      }
+    }
   }
 
   /**
