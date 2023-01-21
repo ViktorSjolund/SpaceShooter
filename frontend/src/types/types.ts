@@ -28,7 +28,6 @@ export type TVolumeProps = {
 export type TCharactersProps = {
   charpicker: CharacterPicker
   lvlhandler: PlayerLevelHandler
-  audioHandler: AudioHandler
 }
 
 export type TUpgrades = {
@@ -104,7 +103,6 @@ export type TGameWonProps = {
 
 export type TLevelsProps = {
   lvlpicker: LevelPicker
-  audioHandler: AudioHandler
 }
 
 export type TUserInfoProps = {
@@ -121,7 +119,6 @@ export type TTimer = {
 
 export type TLeaderboardProps = {
   lvlhandler: PlayerLevelHandler
-  audioHandler: AudioHandler
 }
 
 export type TUpgradeButtonProps = {

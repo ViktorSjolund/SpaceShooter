@@ -40,7 +40,7 @@ export const Leaderboard = (props: TLeaderboardProps) => {
           </tbody>
         </table>
       </div>
-      <MenuButton audioHandler={props.audioHandler}/>
+      <MenuButton />
     </div>
   )
 }

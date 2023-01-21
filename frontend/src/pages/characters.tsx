@@ -5,17 +5,14 @@ import { MenuButton } from '../components/menu-button'
 import { UserInfo } from '../components/user-info'
 import { useMeQuery } from '../generated/graphql'
 import { CHARACTER } from '../logic/util/enums'
-import { AudioHandler } from '../misc/audio-handler'
 import { TCharactersProps } from '../types/types'
 
 export const Characters = (props: TCharactersProps) => {
   const { loading, data } = useMeQuery()
   const [updateState, setUpdateState] = useState(false)
-  const audioHandler = new AudioHandler()
 
   const handleClick = (characterPick: CHARACTER) => {
     props.charpicker.chosenCharacter = characterPick
-    audioHandler.playClickSound()
     setUpdateState(!updateState)
   }
 
@@ -29,7 +26,7 @@ export const Characters = (props: TCharactersProps) => {
       <UserInfo lvlhandler={props.lvlhandler} />
       <div className='characters-wrapper'>
         <span>Characters</span>
-        <MenuButton audioHandler={props.audioHandler}/>
+        <MenuButton />
         <div>
           <span> Default </span>
           <span>

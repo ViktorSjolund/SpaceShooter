@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
-import { UpgradesHandler } from '../logic/upgrade-logic/upgrades-handler'
 import { UPGRADE_ID } from '../logic/util/enums'
 import { TUpgradeMenuProps, TUpgrade } from '../types/types'
-import { UpgradesDocument, useMeQuery, useRemoveAllUpgradesMutation, useUpgradesQuery } from '../generated/graphql'
+import { useMeQuery, useUpgradesQuery } from '../generated/graphql'
 import { MenuButton } from '../components/menu-button'
 import { UserInfo } from '../components/user-info'
 import { Loading } from '../components/loading'
@@ -30,7 +29,6 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
       characterId: props.charpicker.chosenCharacter
     }
   })
-  const [removeAllUpgradesMutation] = useRemoveAllUpgradesMutation()
 
   useEffect(() => {
     if (upgradesData) {
@@ -204,7 +202,7 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
         <GrPowerReset size={25} />
       </button>
       <UserInfo lvlhandler={props.lvlhandler} />
-      <MenuButton audioHandler={props.audiohandler} />
+      <MenuButton />
     </div>
   )
 }

@@ -13,21 +13,30 @@ import { PlayerLevelHandler } from '../logic/player-level-handler'
 import { TAppRouterProps } from '../types/types'
 import { Leaderboard } from '../pages/leaderboard'
 import { UpgradesHandler } from '../logic/upgrade-logic/upgrades-handler'
+import { useEffect, useMemo } from 'react'
 
 export const AppRouter = (props: TAppRouterProps) => {
   const levelPicker = new LevelPicker()
   const characterPicker = new CharacterPicker()
-  const audioHandler = new AudioHandler()
+  const audioHandler = useMemo(() => new AudioHandler(), [])
   const playerLevelHandler = new PlayerLevelHandler()
   const upgradesHandler = new UpgradesHandler(props.client)
-  audioHandler.playThemeSong()
 
-  window.addEventListener('click', (e: MouseEvent) => {
-    const target = e.target as HTMLElement
-    if (target.nodeName === 'A') {
-      audioHandler.playClickSound()
+  useEffect(() => {
+    audioHandler.playThemeSong()
+    const listener = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      if (target.nodeName === 'A' || target.nodeName === 'BUTTON') {
+        audioHandler.playClickSound()
+      }
     }
-  })
+
+    window.addEventListener('click', listener)
+
+    return () => {
+      window.removeEventListener('click', listener)
+    }
+  }, [audioHandler])
 
   return (
     <Router>
@@ -68,7 +77,6 @@ export const AppRouter = (props: TAppRouterProps) => {
           element={
             <Levels
               lvlpicker={levelPicker}
-              audioHandler={audioHandler}
             />
           }
         />
@@ -86,7 +94,6 @@ export const AppRouter = (props: TAppRouterProps) => {
             <Characters
               charpicker={characterPicker}
               lvlhandler={playerLevelHandler}
-              audioHandler={audioHandler}
             />
           }
         />
@@ -95,7 +102,6 @@ export const AppRouter = (props: TAppRouterProps) => {
           element={
             <Leaderboard
               lvlhandler={playerLevelHandler}
-              audioHandler={audioHandler}
             />
           }
         />

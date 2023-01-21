@@ -10,7 +10,6 @@ export const Levels = (props: TLevelsProps) => {
 
   const handleLevelClick = (levelid: LEVEL) => {
     props.lvlpicker.currentLevel = levelid
-    props.audioHandler.playClickSound()
   }
 
   if (loading) return <Loading />
@@ -21,7 +20,7 @@ export const Levels = (props: TLevelsProps) => {
   return (
     <div className='levels-wrapper'>
       <span>Levels</span>
-      <MenuButton audioHandler={props.audioHandler}/>
+      <MenuButton />
       <Link
         to='/play'
         onClick={(e) => e.preventDefault()}
