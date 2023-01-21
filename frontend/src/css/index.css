@@ -63,7 +63,7 @@ body {
 }
 
 .wrapper.menu a:hover {
-  animation: hoverEffect 0.2s linear;
+  animation: hoverEffect 0s linear;
   animation-fill-mode: forwards;
 }
 
@@ -174,7 +174,7 @@ body {
 }
 
 .menu-button:hover {
-  animation: hoverEffect 0.2s linear;
+  animation: hoverEffect 0s linear;
   animation-fill-mode: forwards;
 }
 
