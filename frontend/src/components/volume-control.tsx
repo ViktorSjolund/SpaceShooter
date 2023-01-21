@@ -7,7 +7,7 @@ import { BsVolumeUpFill } from 'react-icons/bs'
 export const VolumeControl = (props: TVolumeProps) => {
   const [volume, setVolume] = useState(props.audioHandler.volume)
   const [musicVolume, setMusicVolume] = useState(props.audioHandler.musicVolume)
-  const [showSlider, setShowSlider] = useState(true)
+  const [showSlider, setShowSlider] = useState(false)
 
   const handleVolumeSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseInt(e.target.value)
