@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
 import { TPausedProps } from '../types/types'
-import { GAME_STATE } from '../logic/util/enums'
+import { GameState } from '../logic/util/enums'
 import { VolumeControl } from './volume-control'
 
 export const Paused = (props: TPausedProps) => {
   const handleMenuClick = () => {
-    props.game.gamestate = GAME_STATE.OVER
+    props.game.gamestate = GameState.Over
   }
 
   return (

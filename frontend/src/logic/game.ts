@@ -4,7 +4,7 @@ import { UpgradesHandler } from './upgrade-logic/upgrades-handler'
 import { LevelPicker } from './level-picker'
 import { Splitter } from './entities/enemy-types/splitter'
 import { LevelOne } from './levels/level-one'
-import { CHARACTER, GAME_STATE, LEVEL, UPGRADE_ID } from './util/enums'
+import { Character, GameState, Level, UpgradeType } from './util/enums'
 import { Particle } from './entities/particle'
 import { TCanvasRef } from '../types/types'
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client'
@@ -18,7 +18,7 @@ import {
   UpdateLeaderboardDocument,
   UpdateLeaderboardMutationResult,
   UpgradesDocument,
-  UpgradesQueryResult,
+  UpgradesQueryResult
 } from '../generated/graphql'
 import { CharacterPicker } from './character-picker'
 import { Gunner } from './entities/characters/gunner'
@@ -39,7 +39,7 @@ export class Game {
   #upgrades: UpgradesHandler
   #levelPicker: LevelPicker
   #currencyEarned: number
-  #gamestate: GAME_STATE
+  #gamestate: GameState
   #particles: Particle[]
   #isExploding
   #apolloClient
@@ -70,7 +70,7 @@ export class Game {
     this.#upgrades = new UpgradesHandler(client)
     this.#levelPicker = lvlPicker
     this.#currencyEarned = 0
-    this.#gamestate = GAME_STATE.PLAYING
+    this.#gamestate = GameState.Playing
     this.#particles = []
     this.#isExploding = false
     this.#characterPicker = characterPicker
@@ -98,7 +98,7 @@ export class Game {
     return this.#canvasRef
   }
 
-  set gamestate(gameState: GAME_STATE) {
+  set gamestate(gameState: GameState) {
     this.#gamestate = gameState
   }
 
@@ -115,7 +115,7 @@ export class Game {
     })
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        if (this.#gamestate === GAME_STATE.PAUSED) {
+        if (this.#gamestate === GameState.Paused) {
           this.unpause()
         } else {
           this.#pause()
@@ -133,10 +133,10 @@ export class Game {
    * Pauses the game.
    */
   #pause() {
-    if (this.#gamestate === GAME_STATE.WON || this.#gamestate === GAME_STATE.OVER) {
+    if (this.#gamestate === GameState.Won || this.#gamestate === GameState.Over) {
       return
     }
-    this.#gamestate = GAME_STATE.PAUSED
+    this.#gamestate = GameState.Paused
     this.#stateChangeCb(this.#gamestate)
     this.#timer.startPausedTime()
   }
@@ -145,7 +145,7 @@ export class Game {
    * Unpauses the game.
    */
   unpause() {
-    this.#gamestate = GAME_STATE.PLAYING
+    this.#gamestate = GameState.Playing
     this.#stateChangeCb(this.#gamestate)
     this.#timer.subtractPausedTime()
     this.#loop()
@@ -161,36 +161,36 @@ export class Game {
     this.#player = new Gunner({
       position: {
         x: this.#canvasRef.canvas.width / 2 - 25,
-        y: this.#canvasRef.canvas.height * 0.87,
+        y: this.#canvasRef.canvas.height * 0.87
       },
       velocity: {
         x: 0,
-        y: 0,
+        y: 0
       },
       size: {
         width: 50,
-        height: 50,
+        height: 50
       },
       canvasRef: this.#canvasRef,
       images: {
         playerImage: gunnerImg,
-        projImage: projImg,
+        projImage: projImg
       },
       properties: {
         attackRate: 200,
         numberOfProjectiles: 7,
         pierceAmount: 0,
-        damage: 6650,
+        damage: 6650
       },
-      enemies: this.#enemies,
+      enemies: this.#enemies
     })
 
     await this.#applyGunnerUpgrades()
 
     const shootInterval = setInterval(() => {
-      if (this.#gamestate === GAME_STATE.PLAYING) {
+      if (this.#gamestate === GameState.Playing) {
         this.#player.shoot()
-      } else if (this.#gamestate === GAME_STATE.OVER || this.#gamestate === GAME_STATE.WON) {
+      } else if (this.#gamestate === GameState.Over || this.#gamestate === GameState.Won) {
         clearInterval(shootInterval)
       }
     }, this.#player.properties.attackRate)
@@ -207,29 +207,29 @@ export class Game {
     this.#player = new Beamer({
       position: {
         x: this.#canvasRef.canvas.width / 2 - 25,
-        y: this.#canvasRef.canvas.height * 0.87,
+        y: this.#canvasRef.canvas.height * 0.87
       },
       velocity: {
         x: 0,
-        y: 0,
+        y: 0
       },
       size: {
         width: 50,
-        height: 50,
+        height: 50
       },
       canvasRef: this.#canvasRef,
       images: {
         beamerImg,
         beamImg,
-        beamStartImg,
+        beamStartImg
       },
       properties: {
         attackRate: 1,
         numberOfProjectiles: 0,
         pierceAmount: 0,
-        damage: 200,
+        damage: 200
       },
-      enemies: this.#enemies,
+      enemies: this.#enemies
     })
 
     await this.#applyBeamerUpgrades()
@@ -245,7 +245,7 @@ export class Game {
     const starInterval = 2000
 
     setInterval(() => {
-      if (this.#gamestate === GAME_STATE.PAUSED) {
+      if (this.#gamestate === GameState.Paused) {
         return
       }
       this.#background.addStar(this.#canvasRef, -5)
@@ -259,8 +259,8 @@ export class Game {
     const result = (await this.#apolloClient.query({
       query: UpgradesDocument,
       variables: {
-        characterId: CHARACTER.GUNNER,
-      },
+        characterId: Character.Gunner
+      }
     })) as UpgradesQueryResult
 
     if (!result.data?.upgrades) {
@@ -270,23 +270,23 @@ export class Game {
     result.data.upgrades.forEach((dbUpgrade) => {
       this.#upgrades.upgrades.forEach((defaultUpgrade) => {
         if (dbUpgrade.upgrade_id === defaultUpgrade.id) {
-          if (defaultUpgrade.id === UPGRADE_ID.ADD_PROECTILE) {
+          if (defaultUpgrade.id === UpgradeType.AddProjectile) {
             this.#player.properties.numberOfProjectiles += 1
-          } else if (defaultUpgrade.id === UPGRADE_ID.DUPLICATE_PROECTILES) {
+          } else if (defaultUpgrade.id === UpgradeType.DuplicateProjectiles) {
             this.#player.properties.numberOfProjectiles *= 2
-          } else if (defaultUpgrade.id === UPGRADE_ID.ADD_PIERCE) {
+          } else if (defaultUpgrade.id === UpgradeType.AddPierce) {
             this.#player.properties.pierceAmount += 1
-          } else if (defaultUpgrade.id === UPGRADE_ID.ADD_DAMAGE_TEN) {
+          } else if (defaultUpgrade.id === UpgradeType.AddDamageTen) {
             this.#player.properties.damage *= 1.1
-          } else if (defaultUpgrade.id === UPGRADE_ID.ADD_DAMAGE_TWENTY) {
+          } else if (defaultUpgrade.id === UpgradeType.AddDamageTwenty) {
             this.#player.properties.damage *= 1.2
-          } else if (defaultUpgrade.id === UPGRADE_ID.ADD_DAMAGE_THIRTY) {
+          } else if (defaultUpgrade.id === UpgradeType.AddDamageThirty) {
             this.#player.properties.damage *= 1.3
-          } else if (defaultUpgrade.id === UPGRADE_ID.ADD_ATTACK_RATE_TEN) {
+          } else if (defaultUpgrade.id === UpgradeType.AddAttackRateTen) {
             this.#player.properties.attackRate /= 1.1
-          } else if (defaultUpgrade.id === UPGRADE_ID.ADD_ATTACK_RATE_TWENTY) {
+          } else if (defaultUpgrade.id === UpgradeType.AddAttackRateTwenty) {
             this.#player.properties.attackRate /= 1.2
-          } else if (defaultUpgrade.id === UPGRADE_ID.ADD_ATTACK_RATE_THIRTY) {
+          } else if (defaultUpgrade.id === UpgradeType.AddAttackRateThirty) {
             this.#player.properties.attackRate /= 1.3
           }
         }
@@ -301,8 +301,8 @@ export class Game {
     const result = (await this.#apolloClient.query({
       query: UpgradesDocument,
       variables: {
-        characterId: CHARACTER.BEAMER,
-      },
+        characterId: Character.Beamer
+      }
     })) as UpgradesQueryResult
 
     if (!result.data?.upgrades) {
@@ -312,17 +312,17 @@ export class Game {
     result.data.upgrades.forEach((dbUpgrade) => {
       this.#upgrades.upgrades.forEach((defaultUpgrade) => {
         if (dbUpgrade.upgrade_id === defaultUpgrade.id) {
-          if (defaultUpgrade.id === UPGRADE_ID.ADD_DAMAGE_TEN) {
+          if (defaultUpgrade.id === UpgradeType.AddDamageTen) {
             this.#player.properties.damage *= 1.1
-          } else if (defaultUpgrade.id === UPGRADE_ID.ADD_DAMAGE_TWENTY) {
+          } else if (defaultUpgrade.id === UpgradeType.AddDamageTwenty) {
             this.#player.properties.damage *= 1.2
-          } else if (defaultUpgrade.id === UPGRADE_ID.ADD_DAMAGE_THIRTY) {
+          } else if (defaultUpgrade.id === UpgradeType.AddDamageThirty) {
             this.#player.properties.damage *= 1.3
-          } else if (defaultUpgrade.id === UPGRADE_ID.ADD_ATTACK_RATE_TEN) {
+          } else if (defaultUpgrade.id === UpgradeType.AddAttackRateTen) {
             this.#player.properties.attackRate /= 1.1
-          } else if (defaultUpgrade.id === UPGRADE_ID.ADD_ATTACK_RATE_TWENTY) {
+          } else if (defaultUpgrade.id === UpgradeType.AddAttackRateTwenty) {
             this.#player.properties.attackRate /= 1.2
-          } else if (defaultUpgrade.id === UPGRADE_ID.ADD_ATTACK_RATE_THIRTY) {
+          } else if (defaultUpgrade.id === UpgradeType.AddAttackRateThirty) {
             this.#player.properties.attackRate /= 1.3
           }
         }
@@ -334,10 +334,10 @@ export class Game {
    * Initizalises the picked level.
    */
   #initLevel() {
-    if (this.#levelPicker.currentLevel === LEVEL.ENDLESS) {
+    if (this.#levelPicker.currentLevel === Level.Endless) {
       const levelEndless = new LevelEndless(this, 1, this.#imageHandler)
       levelEndless.play()
-    } else if (this.#levelPicker.currentLevel === LEVEL.ONE) {
+    } else if (this.#levelPicker.currentLevel === Level.One) {
       const levelOne = new LevelOne(this, 1)
       levelOne.play()
     }
@@ -381,17 +381,17 @@ export class Game {
         new Particle({
           position: {
             x,
-            y,
+            y
           },
           velocity: {
             x: (Math.random() - 0.5) * 2,
-            y: (Math.random() - 0.5) * 2,
+            y: (Math.random() - 0.5) * 2
           },
           size: {
             width,
-            height,
+            height
           },
-          canvasRef: this.#canvasRef,
+          canvasRef: this.#canvasRef
         })
       )
     }
@@ -414,18 +414,18 @@ export class Game {
         new Particle({
           position: {
             x,
-            y,
+            y
           },
           velocity: {
             x: (Math.random() - 0.5) * 8,
-            y: (Math.random() - 0.5) * 6,
+            y: (Math.random() - 0.5) * 6
           },
           size: {
             width,
-            height,
+            height
           },
           canvasRef: this.#canvasRef,
-          friction: 0.996,
+          friction: 0.996
         })
       )
     }
@@ -439,7 +439,7 @@ export class Game {
   #enemyKilled(enemy: Enemy) {
     this.#audioHandler.playKillSound()
     if (enemy.isWinCondition) {
-      this.#gamestate = GAME_STATE.WON
+      this.#gamestate = GameState.Won
     }
     this.#currencyEarned += enemy.currency
     this.#xpEarned += enemy.xp
@@ -453,7 +453,7 @@ export class Game {
     this.#enemies.forEach((enemy, index, object) => {
       if (enemy.hitpoints.current > 0) {
         if (enemy.reachedEnd) {
-          this.#gamestate = GAME_STATE.OVER
+          this.#gamestate = GameState.Over
           return
         } else {
           enemy.update()
@@ -494,9 +494,9 @@ export class Game {
     ;(await this.#apolloClient.mutate({
       mutation: UpdateCurrencyDocument,
       variables: {
-        currency: this.#currencyEarned,
+        currency: this.#currencyEarned
       },
-      refetchQueries: [{ query: MeDocument }],
+      refetchQueries: [{ query: MeDocument }]
     })) as UpdateCurrencyMutationResult
   }
 
@@ -507,9 +507,9 @@ export class Game {
     ;(await this.#apolloClient.mutate({
       mutation: UpdateExperienceDocument,
       variables: {
-        experience: this.#xpEarned,
+        experience: this.#xpEarned
       },
-      refetchQueries: [{ query: MeDocument }],
+      refetchQueries: [{ query: MeDocument }]
     })) as UpdateExperienceMutationResult
   }
 
@@ -517,11 +517,11 @@ export class Game {
    * Initializes the players chosen character.
    */
   async #initCharacter() {
-    if (this.#characterPicker.chosenCharacter === CHARACTER.GUNNER) {
+    if (this.#characterPicker.chosenCharacter === Character.Gunner) {
       await this.#loadGunner()
-    } else if (this.#characterPicker.chosenCharacter === CHARACTER.BEAMER) {
+    } else if (this.#characterPicker.chosenCharacter === Character.Beamer) {
       await this.#loadBeamer()
-    } else if (this.#characterPicker.chosenCharacter === CHARACTER.THREE) {
+    } else if (this.#characterPicker.chosenCharacter === Character.Three) {
     }
   }
 
@@ -532,9 +532,9 @@ export class Game {
     ;(await this.#apolloClient.mutate({
       mutation: UpdateLeaderboardDocument,
       variables: {
-        time: this.#timer.endTime,
+        time: this.#timer.endTime
       },
-      refetchQueries: [{ query: LeaderboardDocument }],
+      refetchQueries: [{ query: LeaderboardDocument }]
     })) as UpdateLeaderboardMutationResult
   }
 
@@ -545,7 +545,7 @@ export class Game {
     this.#stateChangeCb(this.#gamestate)
     this.#updatePlayerCurrency()
     this.#updatePlayerXp()
-    if (this.#levelPicker.currentLevel === LEVEL.ENDLESS) {
+    if (this.#levelPicker.currentLevel === Level.Endless) {
       this.#updateLeaderboard()
     }
   }
@@ -565,12 +565,12 @@ export class Game {
    * Constantly updates everything within the game.
    */
   #loop() {
-    if (this.#gamestate === GAME_STATE.OVER) {
+    if (this.#gamestate === GameState.Over) {
       this.#endGame()
       return
-    } else if (this.#gamestate === GAME_STATE.PAUSED) {
+    } else if (this.#gamestate === GameState.Paused) {
       return
-    } else if (this.#gamestate === GAME_STATE.WON && this.#particles.length === 0) {
+    } else if (this.#gamestate === GameState.Won && this.#particles.length === 0) {
       this.#endGame()
       return
     }
@@ -589,7 +589,7 @@ export class Game {
     this.#updateBackground()
     this.#updateParticles()
     this.#player.update()
-    if (this.#gamestate === GAME_STATE.WON) {
+    if (this.#gamestate === GameState.Won) {
       if (this.#isExploding) {
         return
       } else {

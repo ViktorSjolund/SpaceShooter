@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Game } from '../logic/game'
-import { GAME_STATE } from '../logic/util/enums'
+import { GameState } from '../logic/util/enums'
 import { GameOver } from '../components/game-over'
 import { GameWon } from '../components/game-won'
 import { Paused } from '../components/paused'
@@ -14,16 +14,16 @@ export const Canvas = (props: TGameCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [game, setGame] = useState<Game | null>(null)
   let isRunning = false
-  const [gamestate, setGamestate] = useState(GAME_STATE.PLAYING)
+  const [gamestate, setGamestate] = useState(GameState.Playing)
 
   const initNewGame = () => {
-    setGamestate(GAME_STATE.PLAYING)
+    setGamestate(GameState.Playing)
     if (!isRunning) {
       const newGame = new Game(
         props.lvlpicker,
         {
           canvas: canvasRef.current!,
-          ctx: canvasRef.current!.getContext('2d')!,
+          ctx: canvasRef.current!.getContext('2d')!
         },
         props.charpicker,
         props.client,
@@ -86,7 +86,7 @@ export const Canvas = (props: TGameCanvasProps) => {
         height='576'
         key={'canvas'}
       ></canvas>
-      {gamestate === GAME_STATE.OVER ? (
+      {gamestate === GameState.Over ? (
         <GameOver
           tryAgain={handleTryAgain}
           currencyEarned={game!.currencyEarned}
@@ -95,7 +95,7 @@ export const Canvas = (props: TGameCanvasProps) => {
       ) : (
         <></>
       )}
-      {gamestate === GAME_STATE.PAUSED ? (
+      {gamestate === GameState.Paused ? (
         <Paused
           game={game!}
           handleResumeClick={handleResumeClick}
@@ -104,7 +104,7 @@ export const Canvas = (props: TGameCanvasProps) => {
       ) : (
         <></>
       )}
-      {gamestate === GAME_STATE.WON ? (
+      {gamestate === GameState.Won ? (
         <GameWon
           nextLevel={handleNextLevelClick}
           currencyEarned={game!.currencyEarned}

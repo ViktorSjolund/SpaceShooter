@@ -1,20 +1,20 @@
-import { LEVEL } from './util/enums'
+import { Level } from './util/enums'
 
 /**
  * Handles picking a level.
  */
 export class LevelPicker {
-  #currentLevel: LEVEL
+  #currentLevel: Level
 
   constructor() {
-    this.#currentLevel = LEVEL.ONE
+    this.#currentLevel = Level.One
   }
 
   get currentLevel() {
     return this.#currentLevel
   }
 
-  set currentLevel(newLevel: LEVEL) {
+  set currentLevel(newLevel: Level) {
     this.#currentLevel = newLevel
   }
 
@@ -24,7 +24,7 @@ export class LevelPicker {
    * @returns An array of the levels in the correct order.
    */
   getLevelsOrderArray() {
-    const orderArray = [LEVEL.ONE, LEVEL.TWO]
+    const orderArray = [Level.One, Level.Two]
     return orderArray
   }
 }

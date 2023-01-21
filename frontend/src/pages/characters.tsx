@@ -4,14 +4,14 @@ import { Loading } from '../components/loading'
 import { MenuButton } from '../components/menu-button'
 import { UserInfo } from '../components/user-info'
 import { useMeQuery } from '../generated/graphql'
-import { CHARACTER } from '../logic/util/enums'
+import { Character } from '../logic/util/enums'
 import { TCharactersProps } from '../types/types'
 
 export const Characters = (props: TCharactersProps) => {
   const { loading, data } = useMeQuery()
   const [updateState, setUpdateState] = useState(false)
 
-  const handleClick = (characterPick: CHARACTER) => {
+  const handleClick = (characterPick: Character) => {
     props.charpicker.chosenCharacter = characterPick
     setUpdateState(!updateState)
   }
@@ -36,10 +36,10 @@ export const Characters = (props: TCharactersProps) => {
             src='/img/spaceship.png'
             alt=''
           />
-          {props.charpicker.chosenCharacter === CHARACTER.GUNNER ? (
+          {props.charpicker.chosenCharacter === Character.Gunner ? (
             <button className='selected'>Selected</button>
           ) : (
-            <button onClick={() => handleClick(CHARACTER.GUNNER)}>Select</button>
+            <button onClick={() => handleClick(Character.Gunner)}>Select</button>
           )}
         </div>
         <div>
@@ -51,10 +51,10 @@ export const Characters = (props: TCharactersProps) => {
             src='/img/beamer.png'
             alt=''
           />
-          {props.charpicker.chosenCharacter === CHARACTER.BEAMER ? (
+          {props.charpicker.chosenCharacter === Character.Beamer ? (
             <button className='selected'>Selected</button>
           ) : (
-            <button onClick={() => handleClick(CHARACTER.BEAMER)}>Select</button>
+            <button onClick={() => handleClick(Character.Beamer)}>Select</button>
           )}
         </div>
       </div>

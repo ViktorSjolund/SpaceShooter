@@ -1,6 +1,6 @@
 import { Game } from '../game'
 import { ImageHandler } from '../../misc/image-handler'
-import { ENEMY, GAME_STATE } from '../util/enums'
+import { EnemyType, GameState } from '../util/enums'
 import { LevelUtil } from './level-util'
 
 /**
@@ -27,7 +27,7 @@ export class LevelEndless {
     const gigantorImg = await this.#imageHandler.getImage('/img/boss1.png')
 
     setInterval(() => {
-      if (this.#game.gamestate === GAME_STATE.PAUSED) {
+      if (this.#game.gamestate === GameState.Paused) {
         return
       }
       this.#levelUtil.difficultyMultiplier += 0.1
@@ -36,22 +36,22 @@ export class LevelEndless {
 
     setInterval(() => {
       const amount = Math.random() * (4 - 1) + 1
-      this.#levelUtil.createEnemy(ENEMY.SPLITTER, splitterImg, amount)
+      this.#levelUtil.createEnemy(EnemyType.Splitter, splitterImg, amount)
     }, 1000)
 
     setInterval(() => {
       const amount = Math.random() * (4 - 1) + 1
-      this.#levelUtil.createEnemy(ENEMY.ASTEROID, asteroidImg, amount)
+      this.#levelUtil.createEnemy(EnemyType.Asteroid, asteroidImg, amount)
     }, 500)
 
     setInterval(() => {
       const amount = Math.random() * (4 - 1) + 1
-      this.#levelUtil.createEnemy(ENEMY.UFO, ufoImg, amount)
+      this.#levelUtil.createEnemy(EnemyType.Ufo, ufoImg, amount)
     }, 2000)
 
     setInterval(() => {
       const amount = Math.random() * (3 - 1) + 1
-      this.#levelUtil.createEnemy(ENEMY.GIGANTOR, gigantorImg, amount)
+      this.#levelUtil.createEnemy(EnemyType.Gigantor, gigantorImg, amount)
     }, 10000)
   }
 }

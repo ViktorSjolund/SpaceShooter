@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { UPGRADE_ID } from '../logic/util/enums'
+import { UpgradeType } from '../logic/util/enums'
 import { TUpgradeMenuProps, TUpgrade } from '../types/types'
 import { useMeQuery, useUpgradesQuery } from '../generated/graphql'
 import { MenuButton } from '../components/menu-button'
@@ -51,7 +51,7 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
     }
   }, [upgradesData, upgradesStatus, props.upgradesHandler.upgrades])
 
-  const handleNewUpgrade = async (upgradeId: UPGRADE_ID) => {
+  const handleNewUpgrade = async (upgradeId: UpgradeType) => {
     const result = await props.upgradesHandler.canPurchaseUpgrade(upgradeId, props.lvlhandler)
     if (result.success) {
       const upgrades = [...upgradesStatus]
@@ -100,7 +100,7 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
     }
   }
 
-  const isUnlocked = (upgradeId: UPGRADE_ID) => {
+  const isUnlocked = (upgradeId: UpgradeType) => {
     let upgradeIsUnlocked = false
 
     upgradesStatus.forEach((upgrade) => {

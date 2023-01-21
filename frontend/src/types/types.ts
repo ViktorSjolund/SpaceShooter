@@ -8,7 +8,7 @@ import { MouseEventHandler } from 'react'
 import { CharacterPicker } from '../logic/character-picker'
 import { LevelPicker } from '../logic/level-picker'
 import { PlayerLevelHandler } from '../logic/player-level-handler'
-import { CHARACTER, GAME_STATE } from '../logic/util/enums'
+import { Character, GameState } from '../logic/util/enums'
 import { AudioHandler } from '../misc/audio-handler'
 import { UpgradesHandler } from '@/logic/upgrade-logic/upgrades-handler'
 
@@ -18,7 +18,7 @@ export type TUpgrade = {
   requirement: number
   description: string
   imgSrc: string
-  characters: CHARACTER[]
+  characters: Character[]
 }
 
 export type TVolumeProps = {
@@ -147,8 +147,7 @@ export type TCurrencyDisplay = {
   canvasRef: TCanvasRef
 }
 
-export type TStateChangeCb = (state: GAME_STATE) => void
-
+export type TStateChangeCb = (state: GameState) => void
 
 export type TPosition = {
   x: number

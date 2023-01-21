@@ -12,7 +12,7 @@ import {
   UpgradesDocument,
   UpgradesQueryResult
 } from '../../generated/graphql'
-import { CHARACTER, UPGRADE_ID } from '../util/enums'
+import { Character, UpgradeType } from '../util/enums'
 import { upgrades } from './upgrades'
 import { PlayerLevelHandler } from '../player-level-handler'
 
@@ -100,7 +100,7 @@ export class UpgradesHandler {
    * @param characterId The character id the upgrade applies to.
    * @returns False if the upgrade could not be added to the database.
    */
-  async #addUpgradeToDb(upgradeId: number, characterId: CHARACTER): Promise<Boolean> {
+  async #addUpgradeToDb(upgradeId: number, characterId: Character): Promise<Boolean> {
     let upgrade: TUpgrade | null = null
 
     for (const [, u] of this.#upgrades.entries()) {
@@ -168,8 +168,8 @@ export class UpgradesHandler {
    * @returns An object containing information about the purchase success.
    */
   async purchaseUpgrade(
-    upgradeId: UPGRADE_ID,
-    characterId: CHARACTER,
+    upgradeId: UpgradeType,
+    characterId: Character,
     lvlHandler: PlayerLevelHandler
   ): Promise<TAddUpgradeResponse> {
     const result = (await this.#apolloClient.query({
@@ -206,7 +206,7 @@ export class UpgradesHandler {
     }
   }
 
-  async removeAllUpgrades(characterId: CHARACTER) {
+  async removeAllUpgrades(characterId: Character) {
     await this.#apolloClient.mutate({
       mutation: RemoveAllUpgradesDocument,
       variables: {

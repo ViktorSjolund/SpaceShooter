@@ -3,12 +3,12 @@ import { TLevelsProps } from '../types/types'
 import { Loading } from '../components/loading'
 import { MenuButton } from '../components/menu-button'
 import { useMeQuery } from '../generated/graphql'
-import { LEVEL } from '../logic/util/enums'
+import { Level } from '../logic/util/enums'
 
 export const Levels = (props: TLevelsProps) => {
   const { loading, data } = useMeQuery()
 
-  const handleLevelClick = (levelid: LEVEL) => {
+  const handleLevelClick = (levelid: Level) => {
     props.lvlpicker.currentLevel = levelid
   }
 
@@ -32,7 +32,7 @@ export const Levels = (props: TLevelsProps) => {
       <Link
         to='/play'
         className='level-mode'
-        onClick={() => handleLevelClick(LEVEL.ENDLESS)}
+        onClick={() => handleLevelClick(Level.Endless)}
       >
         Endless Mode
       </Link>

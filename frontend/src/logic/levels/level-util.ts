@@ -2,7 +2,7 @@ import { Enemy } from '../entities/enemy'
 import { Gigantor } from '../entities/enemy-types/boss-types/gigantor'
 import { Splitter } from '../entities/enemy-types/splitter'
 import { Game } from '../game'
-import { ENEMY, GAME_STATE } from '../util/enums'
+import { EnemyType, GameState } from '../util/enums'
 
 /**
  * Handles any utlity the levels use.
@@ -71,25 +71,25 @@ export class LevelUtil {
       new Gigantor({
         position: {
           x: posX,
-          y: 0 - size * (Math.random() * (1.6 - 1.1) + 1.1),
+          y: 0 - size * (Math.random() * (1.6 - 1.1) + 1.1)
         },
         velocity: {
           x: 0,
-          y: velY,
+          y: velY
         },
         size: {
           width,
-          height,
+          height
         },
         hitpoints: {
           current: hitpoints,
-          default: hitpoints,
+          default: hitpoints
         },
         canvasRef: this.#game.canvasRef,
         image,
         dodgeChance: 0.5,
         isWinCondition: false,
-        game: this.#game,
+        game: this.#game
       })
     )
   }
@@ -115,24 +115,24 @@ export class LevelUtil {
       new Enemy({
         position: {
           x: this.#randomPosXValue(),
-          y: 0 - size * 1.1,
+          y: 0 - size * 1.1
         },
         velocity: {
           x: 0,
-          y: velY,
+          y: velY
         },
         size: {
           width,
-          height,
+          height
         },
         hitpoints: {
           current: hitpoints,
-          default: hitpoints,
+          default: hitpoints
         },
         canvasRef: this.#game.canvasRef,
         image,
         dodgeChance: 0,
-        isWinCondition: false,
+        isWinCondition: false
       })
     )
   }
@@ -160,24 +160,24 @@ export class LevelUtil {
       new Enemy({
         position: {
           x: this.#randomPosXValue(),
-          y: 0 - randomSize * 1.1,
+          y: 0 - randomSize * 1.1
         },
         velocity: {
           x: 0,
-          y: velY,
+          y: velY
         },
         size: {
           width,
-          height,
+          height
         },
         hitpoints: {
           current: hitpoints,
-          default: hitpoints,
+          default: hitpoints
         },
         canvasRef: this.#game.canvasRef,
         image,
         dodgeChance: 0,
-        isWinCondition: false,
+        isWinCondition: false
       })
     )
   }
@@ -203,26 +203,26 @@ export class LevelUtil {
       new Splitter({
         position: {
           x: this.#randomPosXValue(),
-          y: 0 - size * 1.1,
+          y: 0 - size * 1.1
         },
         velocity: {
           x: 0,
-          y: velY,
+          y: velY
         },
         size: {
           width,
-          height,
+          height
         },
         hitpoints: {
           current: hitpoints,
-          default: hitpoints,
+          default: hitpoints
         },
         canvasRef: this.#game.canvasRef,
         image,
         game: this.#game,
         isSplit: false,
         dodgeChance: 0,
-        isWinCondition: false,
+        isWinCondition: false
       })
     )
   }
@@ -235,19 +235,19 @@ export class LevelUtil {
    * @param enemyCount The amount of times the enemy is to be created.
    * @returns
    */
-  createEnemy(enemyType: ENEMY, image: HTMLImageElement, enemyCount: number) {
-    if (this.#game.gamestate === GAME_STATE.PAUSED) {
+  createEnemy(enemyType: EnemyType, image: HTMLImageElement, enemyCount: number) {
+    if (this.#game.gamestate === GameState.Paused) {
       return
     }
 
     for (let i = 0; i < enemyCount; i++) {
-      if (enemyType === ENEMY.SPLITTER) {
+      if (enemyType === EnemyType.Splitter) {
         this.#addSplitter(image)
-      } else if (enemyType === ENEMY.ASTEROID) {
+      } else if (enemyType === EnemyType.Asteroid) {
         this.#addAsteroid(image)
-      } else if (enemyType === ENEMY.UFO) {
+      } else if (enemyType === EnemyType.Ufo) {
         this.#addUfo(image)
-      } else if (enemyType === ENEMY.GIGANTOR) {
+      } else if (enemyType === EnemyType.Gigantor) {
         this.#addGigantor(image)
       }
     }
