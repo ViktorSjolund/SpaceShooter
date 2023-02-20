@@ -2,13 +2,13 @@ import express from 'express'
 import dotenv from 'dotenv'
 import { ApolloServer } from 'apollo-server-express'
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core'
-import { UserResolver } from '../src/resolvers/user-resolver'
+import { UserResolver } from './resolvers/user-resolver'
 import { buildSchema } from 'type-graphql'
 import 'reflect-metadata'
 import cors from 'cors'
 import session from 'express-session'
-import { UpgradesResolver } from '../src/resolvers/upgrades-resolver'
-import { LeaderboardResolver } from '../src/resolvers/leaderboard-resolver'
+import { UpgradesResolver } from './resolvers/upgrades-resolver'
+import { LeaderboardResolver } from './resolvers/leaderboard-resolver'
 import MySQLStore from 'express-mysql-session'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const MySQLSessionStore = require('express-mysql-session')(session)
@@ -77,19 +77,11 @@ const main = async () => {
   await server.start()
   server.applyMiddleware({ app, cors: corsOptions })
 
-  if (process.env.NODE_ENV !== 'production') {
-    app.listen(PORT, () => console.log(`Listening on port: ${PORT}`))
-  }
-
-  return httpServer
+  app.listen(PORT, () => console.log(`Listening on port: ${PORT}`))
 }
 
 try {
-  if (process.env.NODE_ENV !== 'production') {
-    main()
-  }
+  main()
 } catch (e) {
   console.error(e)
 }
-
-export default main

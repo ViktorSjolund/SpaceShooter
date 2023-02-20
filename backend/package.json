@@ -2,10 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "api/index.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "node build/api/index.js",
-    "dev": "nodemon api/index.ts",
+    "start": "node build/src/index.js",
+    "dev": "nodemon src/index.ts",
     "build": "tsc --build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
