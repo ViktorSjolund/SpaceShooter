@@ -66,7 +66,8 @@ const main = async () => {
       req,
       res,
     }),
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    persistedQueries: false
   })
 
   const corsOptions: cors.CorsOptions = {
