@@ -31,11 +31,11 @@ export const Register = () => {
     setPasswordErr('')
     setUsernameErr('')
     setRepasswordErr('')
-    setIsRegistering(true)
     if (password !== repassword) {
       setRepasswordErr('Passwords needs to be matching.')
       return
     }
+    setIsRegistering(true)
     const result = await registerUser({
       variables: {
         username,
