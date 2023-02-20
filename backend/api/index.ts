@@ -47,7 +47,7 @@ const main = async () => {
         connection
       ),
       cookie: {
-        maxAge: 1000 * 60 * 60 * 24,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
         httpOnly: process.env.NODE_ENV === 'production' ? false : true,
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         secure: process.env.NODE_ENV === 'production' ? true : false,
