@@ -80,8 +80,16 @@ const main = async () => {
   if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => console.log(`Listening on port: ${PORT}`))
   }
+
+  return httpServer
 }
 
-main()
+try {
+  if (process.env.NODE_ENV !== 'production') {
+    main()
+  }
+} catch (e) {
+  console.error(e)
+}
 
-export default httpServer
+export default main
