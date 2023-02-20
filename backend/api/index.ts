@@ -15,14 +15,13 @@ const MySQLSessionStore = require('express-mysql-session')(session)
 import * as mysql from 'mysql2/promise'
 import http from 'http'
 
-dotenv.config()
-const app = express()
-const httpServer = http.createServer(app)
-
 /**
  * Main function for starting the server.
  */
 const main = async () => {  
+  dotenv.config()
+  const app = express()
+  const httpServer = http.createServer(app)
   const PORT = process.env.PORT || 3001
   const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000'
   const connection = await mysql.createConnection(process.env.DATABASE_URL!)
