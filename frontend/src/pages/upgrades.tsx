@@ -32,24 +32,19 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
 
   useEffect(() => {
     if (upgradesData) {
-      const upgradesStat = [...upgradesStatus]
-      upgradesData.upgrades.forEach((u) => {
-        upgradesStat.forEach((ustatus) => {
-          if (ustatus.upgradeId === u.upgrade_id) {
-            ustatus.unlocked = true
+      const upgradesStat: TUpgradeStatus[] = []
+      for (const upg of upgradesData.upgrades) {
+        for (const u of props.upgradesHandler.upgrades) {
+          if (upg.upgrade_id === u.id) {
+            upgradesStat.push({ upgradeId: u.id, unlocked: true })
+          } else {
+            upgradesStat.push({ upgradeId: u.id, unlocked: false })
           }
-        })
-      })
-      setUpgradesStatus(() => [...upgradesStat])
+        }
+      }
+      setUpgradesStatus([...upgradesStat])
     }
-    if (upgradesStatus.length === 0) {
-      const upgrades: TUpgradeStatus[] = []
-      props.upgradesHandler.upgrades.forEach((u) => {
-        upgrades.push({ upgradeId: u.id, unlocked: false })
-      })
-      setUpgradesStatus([...upgrades])
-    }
-  }, [upgradesData, upgradesStatus, props.upgradesHandler.upgrades])
+  }, [upgradesData, props.upgradesHandler.upgrades])
 
   const handleNewUpgrade = async (upgradeId: UpgradeType) => {
     const result = await props.upgradesHandler.canPurchaseUpgrade(upgradeId, props.lvlhandler)
@@ -188,9 +183,9 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
       )}
       {showResetText && (
         <div className='upgrade-cost-tooltip'>
-          <span>!--------------------!</span>
-          <span>! Resets all upgrades. !</span>
-          <span>!--------------------!</span>
+          <span>!---------------------!</span>
+          <span>! Resets all upgrades !</span>
+          <span>!---------------------!</span>
         </div>
       )}
       <button
@@ -199,7 +194,7 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
         onMouseLeave={() => setShowResetText(false)}
         onClick={handleResetUpgrades}
       >
-        <GrPowerReset size={25} />
+        <GrPowerReset size={25} style={{ pointerEvents: 'none' }} />
       </button>
       <UserInfo lvlhandler={props.lvlhandler} />
       <MenuButton />
