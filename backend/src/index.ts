@@ -26,6 +26,10 @@ const main = async () => {
   const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000'
   const connection = await mysql.createConnection(process.env.DATABASE_URL!)
 
+  setInterval(() => {
+    connection.ping()
+  }, 1000 * 60 * 10)
+
   if (process.env.NODE_ENV === 'production') {
     app.set('trust proxy', 1)
     app.use(cors({
