@@ -227,7 +227,7 @@ export class Game {
         attackRate: 1,
         numberOfProjectiles: 0,
         pierceAmount: 0,
-        damage: 200
+        damage: 1000
       },
       enemies: this.#enemies
     })
