@@ -19,8 +19,9 @@ export class Gunner implements CharacterInterface {
   #missiles: Missile[]
   #explosions: Explosion[]
   #enemies
+  #audioHandler
 
-  constructor({ position, images, canvasRef, size, properties, velocity, enemies }: TCharacter) {
+  constructor({ position, images, canvasRef, size, properties, velocity, enemies, audioHandler }: TCharacter) {
     this.#position = position
     this.#images = images
     this.#canvasRef = canvasRef
@@ -33,6 +34,7 @@ export class Gunner implements CharacterInterface {
     this.#collisionChecker = new CollisionChecker()
     this.#explosions = []
     this.#enemies = enemies
+    this.#audioHandler = audioHandler
   }
 
   get position() {
@@ -57,16 +59,6 @@ export class Gunner implements CharacterInterface {
 
   get damageNumbers() {
     return this.#damageNumbers
-  }
-
-  /**
-   * Plays a shooting sound effect.
-   */
-  #playShootSound() {
-    const shootSound = new Audio('/sound/laser-gun-sound.mp3')
-    shootSound.loop = false
-    shootSound.volume = 0.005
-    shootSound.play()
   }
 
   useAbility() {
@@ -107,7 +99,7 @@ export class Gunner implements CharacterInterface {
   }
 
   shoot() {
-    this.#playShootSound()
+    this.#audioHandler.playShootSound()
     const projSize = 6
     let projAngle = 0
     let isNegative = false

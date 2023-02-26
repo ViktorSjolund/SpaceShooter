@@ -182,7 +182,8 @@ export class Game {
         pierceAmount: 0,
         damage: 6650
       },
-      enemies: this.#enemies
+      enemies: this.#enemies,
+      audioHandler: this.#audioHandler
     })
 
     await this.#applyGunnerUpgrades()

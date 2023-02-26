@@ -306,6 +306,7 @@ export type TCharacter = {
   images: TPlayerImages
   properties: TPlayerProperties
   enemies: Enemy[]
+  audioHandler: AudioHandler
 }
 
 type TBeamerImages = {

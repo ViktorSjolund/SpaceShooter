@@ -41,6 +41,16 @@ export class AudioHandler {
   }
 
   /**
+   * Plays a shooting sound effect.
+   */
+  playShootSound() {
+    const shootSound = new Audio('/sound/laser-gun-sound.mp3')
+    shootSound.loop = false
+    shootSound.volume = 0.005 * this.#volumeMultiplier
+    shootSound.play()
+  }
+
+  /**
    * Plays a clicking sound.
    */
   playClickSound() {
