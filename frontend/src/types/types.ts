@@ -8,7 +8,7 @@ import { MouseEventHandler } from 'react'
 import { CharacterPicker } from '../logic/character-picker'
 import { LevelPicker } from '../logic/level-picker'
 import { PlayerLevelHandler } from '../logic/player-level-handler'
-import { Character, GameState } from '../logic/util/enums'
+import { Character, GameState, UpgradeType } from '../logic/util/enums'
 import { AudioHandler } from '../misc/audio-handler'
 import { UpgradesHandler } from '@/logic/upgrade-logic/upgrades-handler'
 
@@ -122,10 +122,10 @@ export type TLeaderboardProps = {
 }
 
 export type TUpgradeButtonProps = {
-  handleNewUpgrade: any
+  handleNewUpgrade: (upgradeId: UpgradeType) => Promise<boolean> 
   handleUpgradeText: any
   handleHideUpgradeText: any
-  isUnlocked: any
+  isUnlocked: boolean 
   upgrade: TUpgrade
 }
 

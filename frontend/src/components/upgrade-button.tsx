@@ -1,17 +1,42 @@
+import { useEffect, useState } from 'react'
 import { TUpgradeButtonProps } from '../types/types'
 
 export const UpgradeButton = (props: TUpgradeButtonProps) => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [isUnlocked, setIsUnlocked] = useState(props.isUnlocked)
+
+  useEffect(() => {
+    setIsUnlocked(props.isUnlocked)
+  }, [props.isUnlocked])
+
+  const handleUpgrade = async () => {
+    setIsLoading(true)
+    const success = await props.handleNewUpgrade(props.upgrade.id)
+    if (success) {
+      setIsUnlocked(true)
+    }
+    setIsLoading(false)
+  }
+
   return (
     <div
-      onClick={() => props.handleNewUpgrade(props.upgrade.id)}
+      onClick={handleUpgrade}
       onMouseOver={() => props.handleUpgradeText(props.upgrade)}
       onMouseLeave={props.handleHideUpgradeText}
-      className={props.isUnlocked(props.upgrade.id) ? 'unlocked' : ''}
+      className={isUnlocked ? 'unlocked' : ''}
     >
-      <img
-        src={props.upgrade.imgSrc}
-        alt=''
-      />
+      {isLoading ? (
+        <img
+          src='logo192.png'
+          alt=''
+          className='spinner'
+        />
+      ) : (
+        <img
+          src={props.upgrade.imgSrc}
+          alt=''
+        />
+      )}
     </div>
   )
 }

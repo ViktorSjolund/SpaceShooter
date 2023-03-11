@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState, Fragment } from 'react'
 import { UpgradeType } from '../logic/util/enums'
 import { TUpgradeMenuProps, TUpgrade } from '../types/types'
 import { useMeQuery, useUpgradesQuery } from '../generated/graphql'
@@ -9,60 +9,52 @@ import { Navigate } from 'react-router-dom'
 import { UpgradeButton } from '../components/upgrade-button'
 import { GrPowerReset } from 'react-icons/gr'
 
-type TUpgradeStatus = {
-  upgradeId: number
-  unlocked: boolean
-}
-
 export const UpgradeMenu = (props: TUpgradeMenuProps) => {
   const [descText, setDescText] = useState('')
   const [costText, setCostText] = useState('')
   const [reqText, setReqText] = useState('')
   const [upgradeText, setUpgradeText] = useState('')
-  const [upgradesStatus, setUpgradesStatus] = useState<TUpgradeStatus[]>([])
+  const [upgradesStatus, setUpgradesStatus] = useState(new Set())
   const [showUpgradeText, setShowUpgradeText] = useState(false)
   const [showTooltip, setShowTooltip] = useState(false)
   const [showResetText, setShowResetText] = useState(false)
+  const [isResetting, setIsResetting] = useState(false)
   const { loading: meLoading, data: meData } = useMeQuery()
   const { loading: upgradesLoading, data: upgradesData } = useUpgradesQuery({
     variables: {
       characterId: props.charpicker.chosenCharacter
     }
   })
+  useMemo(() => {
+    props.upgradesHandler.upgrades.sort((a, b) => a.requirement - b.requirement)
+  }, [props.upgradesHandler.upgrades])
 
   useEffect(() => {
     if (upgradesData) {
-      const upgradesStat: TUpgradeStatus[] = []
+      const upgradesStat = new Set() 
       for (const upg of upgradesData.upgrades) {
         for (const u of props.upgradesHandler.upgrades) {
           if (upg.upgrade_id === u.id) {
-            upgradesStat.push({ upgradeId: u.id, unlocked: true })
-          } else {
-            upgradesStat.push({ upgradeId: u.id, unlocked: false })
-          }
+            upgradesStat.add(u.id)
+          } 
         }
       }
-      setUpgradesStatus([...upgradesStat])
+      setUpgradesStatus(previous => new Set([...previous, ...upgradesStat]))
     }
   }, [upgradesData, props.upgradesHandler.upgrades])
 
   const handleNewUpgrade = async (upgradeId: UpgradeType) => {
+    props.audiohandler.playClickSound()
     const result = await props.upgradesHandler.canPurchaseUpgrade(upgradeId, props.lvlhandler)
     if (result.success) {
-      const upgrades = [...upgradesStatus]
-      upgrades.forEach((upgrade) => {
-        if (upgrade.upgradeId === upgradeId) {
-          upgrade.unlocked = true
-        }
-      })
-      setUpgradesStatus([...upgrades])
+      setUpgradesStatus(previous => new Set([...previous, upgradeId]))
     } else {
       setUpgradeText(result.error?.message || '')
       setShowUpgradeText(true)
       setTimeout(() => {
         setShowUpgradeText(false)
       }, 2000)
-      return
+      return false
     }
 
     const response = await props.upgradesHandler.purchaseUpgrade(
@@ -70,15 +62,16 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
       props.charpicker.chosenCharacter,
       props.lvlhandler
     )
-    if (response.success) {
-      props.audiohandler.playClickSound()
-    } else {
+    if (response.error) {
       setUpgradeText(response.error?.message || '')
       setShowUpgradeText(true)
       setTimeout(() => {
         setShowUpgradeText(false)
       }, 2000)
+      return false
     }
+
+    return true
   }
 
   const handleUpgradeText = (currentUpgrade: TUpgrade) => {
@@ -96,15 +89,7 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
   }
 
   const isUnlocked = (upgradeId: UpgradeType) => {
-    let upgradeIsUnlocked = false
-
-    upgradesStatus.forEach((upgrade) => {
-      if (upgrade.upgradeId === upgradeId && upgrade.unlocked) {
-        upgradeIsUnlocked = true
-      }
-    })
-
-    return upgradeIsUnlocked
+    return upgradesStatus.has(upgradeId)
   }
 
   const handleHideUpgradeText = () => {
@@ -112,7 +97,10 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
   }
 
   const handleResetUpgrades = async () => {
+    setIsResetting(true)
     await props.upgradesHandler.removeAllUpgrades(props.charpicker.chosenCharacter)
+    setUpgradesStatus(new Set())
+    setIsResetting(false)
   }
 
   if (meLoading) return <Loading />
@@ -121,48 +109,74 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
   }
   if (upgradesLoading) return <Loading />
 
-  const upgradeButtonsLvl1to9: JSX.Element[] = []
-  const upgradeButtonsLvl10to29: JSX.Element[] = []
-  const upgradeButtonsLvl30to59: JSX.Element[] = []
-
-  props.upgradesHandler.upgrades
-    .sort((a, b) => a.requirement - b.requirement)
-    .forEach((upgrade) => {
-      if (upgrade.characters.includes(props.charpicker.chosenCharacter)) {
-        const button = (
-          <UpgradeButton
-            key={upgrade.id}
-            handleNewUpgrade={handleNewUpgrade}
-            handleUpgradeText={handleUpgradeText}
-            handleHideUpgradeText={handleHideUpgradeText}
-            isUnlocked={isUnlocked}
-            upgrade={upgrade}
-          />
-        )
-        if (upgrade.requirement < 10) {
-          upgradeButtonsLvl1to9.push(button)
-        } else if (upgrade.requirement < 30) {
-          upgradeButtonsLvl10to29.push(button)
-        } else if (upgrade.requirement < 60) {
-          upgradeButtonsLvl30to59.push(button)
-        }
-      }
-    })
-
   return (
     <div className='upgrades-wrapper'>
       <div className='upgrades-container'>
         <div>
           <span> Level 1 - 9 </span>
-          {upgradeButtonsLvl1to9}
+          {props.upgradesHandler.upgrades.map((upgrade) => {
+            if (!upgrade.characters.includes(props.charpicker.chosenCharacter)) {
+              return <Fragment key={upgrade.id} />
+            }
+            if (upgrade.requirement < 10 && upgrade.requirement > 0) {
+              return (
+                <UpgradeButton
+                  key={upgrade.id}
+                  handleNewUpgrade={handleNewUpgrade}
+                  handleUpgradeText={handleUpgradeText}
+                  handleHideUpgradeText={handleHideUpgradeText}
+                  isUnlocked={isUnlocked(upgrade.id)}
+                  upgrade={upgrade}
+                />
+              )
+            }
+
+            return <Fragment key={upgrade.id} />
+          })}
         </div>
         <div>
           <span> Level 10 - 29 </span>
-          {upgradeButtonsLvl10to29}
+          {props.upgradesHandler.upgrades.map((upgrade) => {
+            if (!upgrade.characters.includes(props.charpicker.chosenCharacter)) {
+              return <Fragment key={upgrade.id} />
+            }
+            if (upgrade.requirement < 30 && upgrade.requirement > 9) {
+              return (
+                <UpgradeButton
+                  key={upgrade.id}
+                  handleNewUpgrade={handleNewUpgrade}
+                  handleUpgradeText={handleUpgradeText}
+                  handleHideUpgradeText={handleHideUpgradeText}
+                  isUnlocked={isUnlocked(upgrade.id)}
+                  upgrade={upgrade}
+                />
+              )
+            }
+
+            return <Fragment key={upgrade.id} />
+          })}
         </div>
         <div>
           <span> Level 30 - 59 </span>
-          {upgradeButtonsLvl30to59}
+          {props.upgradesHandler.upgrades.map((upgrade) => {
+            if (!upgrade.characters.includes(props.charpicker.chosenCharacter)) {
+              return <Fragment key={upgrade.id} />
+            }
+            if (upgrade.requirement < 60 && upgrade.requirement > 29) {
+              return (
+                <UpgradeButton
+                  key={upgrade.id}
+                  handleNewUpgrade={handleNewUpgrade}
+                  handleUpgradeText={handleUpgradeText}
+                  handleHideUpgradeText={handleHideUpgradeText}
+                  isUnlocked={isUnlocked(upgrade.id)}
+                  upgrade={upgrade}
+                />
+              )
+            }
+
+            return <Fragment key={upgrade.id} />
+          })}
         </div>
       </div>
       {showTooltip ? (
@@ -194,7 +208,11 @@ export const UpgradeMenu = (props: TUpgradeMenuProps) => {
         onMouseLeave={() => setShowResetText(false)}
         onClick={handleResetUpgrades}
       >
-        <GrPowerReset size={25} style={{ pointerEvents: 'none' }} />
+        <GrPowerReset
+          size={25}
+          style={{ pointerEvents: 'none' }}
+          className={isResetting ? 'spinner' : ''}
+        />
       </button>
       <UserInfo lvlhandler={props.lvlhandler} />
       <MenuButton />

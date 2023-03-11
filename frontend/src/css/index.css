@@ -435,6 +435,10 @@ canvas {
   align-items: center;
 }
 
+.spinner {
+  animation: spin 3s linear infinite;
+}
+
 .form-submit > svg {
   animation: spin 0.8s linear infinite;
 }
